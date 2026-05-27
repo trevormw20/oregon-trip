@@ -1,10 +1,60 @@
 {
   "_meta": {
     "trip": "The Oregon Coast Adventure",
-    "exportedAt": null,
+    "exportedAt": "2026-05-27T00:00:00.000Z",
     "version": 1,
-    "_comment": "This file is the shared family notes for the Oregon trip. Use the Import button on the dashboard to load it. Use Export to save your changes back here, then commit & push to GitHub."
+    "_comment": "Shared family notes for the Oregon trip. The dashboard auto-loads this on first visit. Use Export to save changes back here, then commit & push to GitHub."
   },
-  "schedule": [],
-  "questions": []
+  "schedule": [
+    {
+      "id": "seed_sched_heceta",
+      "text": "Sunday, Aug 2: group day at Heceta Head Lighthouse (free). One family heads home that evening, around the little kids' bedtime.",
+      "author": "Plan",
+      "createdAt": "2026-05-27T00:00:00.000Z"
+    },
+    {
+      "id": "seed_sched_longshort",
+      "text": "Dad wants to alternate long and short driving days. Revisit how we split the legs (currently 425 mi then 326 mi out; 326 then 425 back).",
+      "author": "Dad",
+      "createdAt": "2026-05-27T00:01:00.000Z"
+    },
+    {
+      "id": "seed_sched_campsites",
+      "text": "Dad has the list of who gets which campsite at Harbor Vista.",
+      "author": "Dad",
+      "createdAt": "2026-05-27T00:02:00.000Z"
+    }
+  ],
+  "questions": [
+    {
+      "id": "seed_q_days",
+      "text": "Which days for: Sea Lion Caves, Cape Perpetua + whale watching, Newport Aquarium, outlet stores, and the Hobbit Trail?",
+      "author": "Group",
+      "createdAt": "2026-05-27T00:03:00.000Z"
+    },
+    {
+      "id": "seed_q_dinners",
+      "text": "Group dinners: who's cooking which night? Each family handles their own breakfast & lunch; sign up to cook one group dinner.",
+      "author": "Group",
+      "createdAt": "2026-05-27T00:04:00.000Z"
+    },
+    {
+      "id": "seed_q_mila",
+      "text": "Mila sent a list of food suggestions — add them to the plan.",
+      "author": "Mila",
+      "createdAt": "2026-05-27T00:05:00.000Z"
+    },
+    {
+      "id": "seed_q_chicken",
+      "text": "Chicken place near Florence — get the name & address, then add it to the wish list.",
+      "author": "Group",
+      "createdAt": "2026-05-27T00:06:00.000Z"
+    },
+    {
+      "id": "seed_q_mos",
+      "text": "Mo's is on the plan — pick which night(s) to go. We could eat out more than once.",
+      "author": "Group",
+      "createdAt": "2026-05-27T00:07:00.000Z"
+    }
+  ]
 }

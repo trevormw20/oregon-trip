@@ -20,6 +20,16 @@ function gmapsDirectionsUrl([lat, lng]) {
   return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
 }
 
+// Best directions URL for an item: prefer a named place/address (exact),
+// fall back to coordinates.
+function directionsUrlFor(item) {
+  if (item.mapsDest) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.mapsDest)}&travelmode=driving`;
+  }
+  if (item.coords) return gmapsDirectionsUrl(item.coords);
+  return null;
+}
+
 // ----- Money formatter -----
 function money(n) {
   if (!n || n === 0) return "—";
@@ -41,22 +51,22 @@ function renderHeader() {
 function renderStats() {
   const totalDays = TRIP.days.length;
 
-  let totalCost = 0;
+  let totalMiles = 0;
   let activityCount = 0;
-  let mealCount = 0;
+  let campNights = 0;
   for (const d of TRIP.days) {
     for (const it of d.items) {
-      totalCost += Number(it.cost || 0);
+      totalMiles += Number(it.miles || 0);
       if (it.type === "activity") activityCount++;
-      if (it.type === "food") mealCount++;
+      if (it.type === "camp") campNights++;
     }
   }
 
   const stats = [
-    { icon: "📅", label: "Days",        value: totalDays },
-    { icon: "🎢", label: "Activities",  value: activityCount },
-    { icon: "🍽️", label: "Meals Out",   value: mealCount },
-    { icon: "💰", label: "Total Cost",  value: totalCost > 0 ? money(totalCost) : "TBD" },
+    { icon: "📅", label: "Days",            value: totalDays },
+    { icon: "🚗", label: "Round-Trip Miles", value: totalMiles > 0 ? totalMiles.toLocaleString("en-US") : "TBD" },
+    { icon: "⛺", label: "Nights Camping",   value: campNights },
+    { icon: "🎢", label: "Activities",       value: activityCount },
   ];
 
   document.getElementById("stats").innerHTML = stats.map(s => `
@@ -107,7 +117,8 @@ function renderDayDetail() {
 
   const itemsHtml = day.items.map(item => {
     const meta = TYPE_META[item.type] || TYPE_META.activity;
-    const costClass = item.cost > 0 ? "" : "zero";
+    const dirUrl = directionsUrlFor(item);
+    const showCost = Number(item.cost) > 0;
     return `
       <div class="item ${item.type}">
         <div class="item-icon" title="${meta.label}">${meta.emoji}</div>
@@ -117,10 +128,10 @@ function renderDayDetail() {
           ${item.notes ? `<p class="item-notes">${escapeHtml(item.notes)}</p>` : ""}
         </div>
         <div class="item-actions">
-          <span class="item-cost ${costClass}">${money(item.cost)}</span>
-          ${item.coords ? `
+          ${showCost ? `<span class="item-cost">${money(item.cost)}</span>` : ""}
+          ${dirUrl ? `
             <a class="maps-btn"
-               href="${gmapsDirectionsUrl(item.coords)}"
+               href="${dirUrl}"
                target="_blank" rel="noopener">
                🧭 Directions
             </a>` : ""}
@@ -129,12 +140,48 @@ function renderDayDetail() {
     `;
   }).join("");
 
+  const foodHtml = (day.food && day.food !== "TODO")
+    ? `<p class="day-food">🍴 <strong>Food:</strong> ${escapeHtml(day.food)}</p>`
+    : "";
+
   el.innerHTML = `
     <h2>Day ${day.day}: ${escapeHtml(day.title)}</h2>
     <p class="day-date">${escapeHtml(day.date)}</p>
-    <p class="day-summary">${escapeHtml(day.summary)}</p>
+    ${day.summary ? `<p class="day-summary">${escapeHtml(day.summary)}</p>` : ""}
+    ${foodHtml}
     ${itemsHtml}
   `;
+}
+
+// =====================================================================
+// WISH LIST — places to visit, no day picked yet
+// =====================================================================
+function renderWishlist() {
+  const grid = document.getElementById("wishlist-grid");
+  const list = TRIP.wishlist || [];
+  if (!grid) return;
+
+  if (list.length === 0) {
+    grid.innerHTML = `<p class="wishlist-empty">Nothing on the wish list yet.</p>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(place => {
+    const meta = TYPE_META[place.type] || TYPE_META.activity;
+    const dirUrl = directionsUrlFor(place);
+    return `
+      <div class="wish-card ${place.type}">
+        <div class="wish-icon">${meta.emoji}</div>
+        <div class="wish-body">
+          <h3>${escapeHtml(place.name)}</h3>
+          ${place.notes ? `<p class="wish-notes">${escapeHtml(place.notes)}</p>` : ""}
+        </div>
+        ${dirUrl ? `
+          <a class="maps-btn" href="${dirUrl}" target="_blank" rel="noopener">🧭 Directions</a>
+        ` : `<span class="wish-noloc">📍 location TBD</span>`}
+      </div>
+    `;
+  }).join("");
 }
 
 // =====================================================================
@@ -164,7 +211,22 @@ function renderMap() {
         dayLabel: `Day ${day.day} — ${day.title}`,
         notes: item.notes || "",
         cost: item.cost,
+        mapsDest: item.mapsDest,
       });
+    });
+  });
+
+  // Wish-list places (no day picked yet) — flagged so they get a ★ badge
+  (TRIP.wishlist || []).forEach(place => {
+    if (!place.coords) return;
+    allPoints.push({
+      type: place.type,
+      coords: place.coords,
+      name: place.name,
+      dayLabel: "⭐ Wish list — no day picked yet",
+      notes: place.notes || "",
+      mapsDest: place.mapsDest,
+      isWish: true,
     });
   });
 
@@ -186,8 +248,9 @@ function renderMap() {
     const icon = L.divIcon({
       className: "",
       html: `
-        <div class="trip-marker" style="background:${meta.color}">
+        <div class="trip-marker ${pt.isWish ? "wish" : ""}" style="background:${meta.color}">
           <div class="trip-marker-inner">${meta.emoji}</div>
+          ${pt.isWish ? `<span class="wish-badge">★</span>` : ""}
         </div>`,
       iconSize: [32, 32],
       iconAnchor: [16, 32],
@@ -201,7 +264,7 @@ function renderMap() {
         ${pt.notes ? `<p class="popup-notes">${escapeHtml(pt.notes)}</p>` : ""}
         ${pt.cost ? `<p class="popup-notes"><strong>${money(pt.cost)}</strong></p>` : ""}
         <a class="popup-btn"
-           href="${gmapsDirectionsUrl(pt.coords)}"
+           href="${directionsUrlFor(pt) || gmapsDirectionsUrl(pt.coords)}"
            target="_blank" rel="noopener">
            🧭 Open in Google Maps
         </a>
@@ -318,6 +381,27 @@ function addNote(kind, text) {
   renderNoteList(kind);
 }
 
+// On first visit (no notes saved yet), seed from the repo's
+// oregon-trip-notes.json so everyone starts with the shared notes.
+// Works on the hosted site; silently skipped if the file can't be fetched.
+async function maybeSeedNotes() {
+  if (localStorage.getItem(NOTES_STORAGE_KEY)) return;
+  try {
+    const res = await fetch("oregon-trip-notes.json", { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    const seed = {
+      schedule:  Array.isArray(data.schedule)  ? data.schedule  : [],
+      questions: Array.isArray(data.questions) ? data.questions : [],
+    };
+    if (seed.schedule.length || seed.questions.length) {
+      saveNotes(seed);
+    }
+  } catch (e) {
+    /* file:// or offline — ignore, start with empty notes */
+  }
+}
+
 function setupNotes() {
   // Restore author name across sessions
   const authorInput = document.getElementById("note-author");
@@ -431,11 +515,13 @@ function escapeHtml(str) {
 // =====================================================================
 // BOOT
 // =====================================================================
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   renderHeader();
   renderStats();
   renderTabs();
   renderDayDetail();
+  renderWishlist();
+  await maybeSeedNotes();
   setupNotes();
   renderNoteList("schedule");
   renderNoteList("questions");

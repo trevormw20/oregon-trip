@@ -212,9 +212,19 @@ html, body {
 
 .day-detail .day-summary {
   font-size: 17px;
-  margin: 12px 0 24px;
+  margin: 12px 0 12px;
   color: #495057;
   font-style: italic;
+}
+
+.day-detail .day-food {
+  font-size: 15px;
+  margin: 0 0 24px;
+  color: #495057;
+  background: #fff4e6;
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
 }
 
 /* Item card */
@@ -310,6 +320,106 @@ html, body {
 .item.lodging  { border-left-color: var(--color-sky); }
 .item.camp     { border-left-color: var(--color-tree); }
 .item.drive    { border-left-color: var(--color-purple); }
+
+/* =========================================================
+   WISH LIST SECTION
+   ========================================================= */
+.wishlist-section {
+  background: var(--color-cloud);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-pop);
+  margin-bottom: 36px;
+  border-top: 8px solid var(--color-purple);
+}
+
+.wishlist-section h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin: 0 0 4px;
+  font-size: 28px;
+}
+
+.wishlist-help {
+  color: #6c757d;
+  margin: 0 0 18px;
+  font-size: 15px;
+}
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.wish-card {
+  background: var(--color-mist);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 5px solid var(--color-coral);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.wish-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.wish-card.food { border-top-color: var(--color-orange); }
+
+.wish-icon {
+  font-size: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-soft);
+}
+
+.wish-body h3 {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.wish-notes {
+  margin: 0;
+  font-size: 14px;
+  color: #495057;
+}
+
+.wish-card .maps-btn {
+  align-self: flex-start;
+}
+
+.wish-noloc {
+  align-self: flex-start;
+  font-size: 13px;
+  color: #adb5bd;
+  font-style: italic;
+}
+
+.wish-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  transform: rotate(45deg);
+  font-size: 14px;
+  color: var(--color-sun);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.trip-marker.wish {
+  position: relative;
+  border-style: dashed;
+}
 
 /* =========================================================
    NOTES SECTION
