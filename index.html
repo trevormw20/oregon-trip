@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oregon Trip Dashboard</title>
+
+  <!-- Playful Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Leaflet (free interactive map, no API key needed) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="trip-header">
+    <div class="header-inner">
+      <h1 id="trip-title">Loading…</h1>
+      <p id="trip-subtitle"></p>
+      <p id="trip-family"></p>
+    </div>
+  </header>
+
+  <nav class="day-tabs" id="day-tabs"></nav>
+
+  <main class="dashboard">
+
+    <!-- Trip stats: total days, miles, cost -->
+    <section class="stats" id="stats"></section>
+
+    <!-- Selected day details -->
+    <section class="day-detail" id="day-detail"></section>
+
+    <!-- Family notes: schedule changes + questions -->
+    <section class="notes-section">
+      <div class="notes-header">
+        <h2>Family Notes</h2>
+        <div class="notes-toolbar">
+          <input type="text" id="note-author" placeholder="Your name (optional)" />
+          <button class="notes-btn" id="export-notes" title="Download notes as JSON to commit to the repo">⬇ Export</button>
+          <button class="notes-btn" id="import-notes" title="Load notes from a JSON file">⬆ Import</button>
+          <input type="file" id="import-file" accept="application/json" hidden />
+        </div>
+      </div>
+
+      <div class="notes-grid">
+        <!-- Schedule changes column -->
+        <div class="notes-column" data-kind="schedule">
+          <div class="notes-column-head schedule-head">
+            <span class="notes-icon">📝</span>
+            <div>
+              <h3>Schedule Changes</h3>
+              <p class="notes-sub">Updates, swaps, time changes</p>
+            </div>
+          </div>
+          <form class="note-add-form" data-kind="schedule">
+            <textarea placeholder="e.g., Moved Cannon Beach to morning so we beat the crowds" rows="2" required></textarea>
+            <button type="submit" class="add-note-btn">＋ Add Change</button>
+          </form>
+          <ul class="note-list" id="notes-schedule"></ul>
+        </div>
+
+        <!-- Family questions column -->
+        <div class="notes-column" data-kind="questions">
+          <div class="notes-column-head questions-head">
+            <span class="notes-icon">❓</span>
+            <div>
+              <h3>Family Questions</h3>
+              <p class="notes-sub">Stuff to figure out before we go</p>
+            </div>
+          </div>
+          <form class="note-add-form" data-kind="questions">
+            <textarea placeholder="e.g., Do we need bear spray for the campground?" rows="2" required></textarea>
+            <button type="submit" class="add-note-btn">＋ Add Question</button>
+          </form>
+          <ul class="note-list" id="notes-questions"></ul>
+        </div>
+      </div>
+
+      <p class="notes-help">
+        Notes auto-save to this browser.
+        Click <strong>Export</strong> to download a JSON file you can commit to the GitHub repo —
+        anyone else with the repo can <strong>Import</strong> it to see all the notes.
+      </p>
+    </section>
+
+    <!-- Interactive map showing ALL trip locations -->
+    <section class="map-section">
+      <h2>The Whole Trip on a Map</h2>
+      <p class="map-help">
+        Click any pin to see what we're doing there.
+        Hit the <strong>Open in Google Maps</strong> button to get driving directions.
+      </p>
+      <div id="map"></div>
+
+      <div class="map-legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#ff6b6b"></span>Activity</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ffa94d"></span>Food</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#4dabf7"></span>Lodging</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#37b24d"></span>Camping</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#9775fa"></span>Drive</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#212529"></span>Home Base</span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="trip-footer">
+    <p>Bon voyage! Edit <code>data.js</code> to update the trip.</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

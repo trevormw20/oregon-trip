@@ -1,0 +1,10 @@
+{
+  "_meta": {
+    "trip": "The Oregon Coast Adventure",
+    "exportedAt": null,
+    "version": 1,
+    "_comment": "This file is the shared family notes for the Oregon trip. Use the Import button on the dashboard to load it. Use Export to save your changes back here, then commit & push to GitHub."
+  },
+  "schedule": [],
+  "questions": []
+}
