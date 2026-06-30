@@ -159,7 +159,9 @@ const TRIP = {
           type: "activity",
           name: "Meetings",
           time: "10:00 AM",
-          notes: "Sunday meetings at 10am before heading out for the day.",
+          notes: "Sunday meetings at 10am before heading out for the day. 2705 Munsel Lake Rd, Florence, OR 97439.",
+          coords: [44.0469, -124.0856],
+          mapsDest: "2705 Munsel Lake Rd, Florence, OR 97439",
         },
         {
           type: "activity",
@@ -205,6 +207,14 @@ const TRIP = {
           notes: "About 1.5 hr north. TODO: confirm which outlets.",
           coords: [44.9591, -124.0108],
           mapsDest: "Lincoln City Outlets, 1500 SE East Devils Lake Rd, Lincoln City, OR 97367",
+        },
+        {
+          type: "activity",
+          name: "Connie Hansen Garden Conservancy",
+          time: "Daytime (optional)",
+          notes: "Optional nearby stop while at the outlets — a free public garden in Lincoln City, open dawn to dusk. 1931 NW 33rd St, Lincoln City, OR 97367.",
+          coords: [44.9786, -124.0156],
+          mapsDest: "Connie Hansen Garden Conservancy, 1931 NW 33rd St, Lincoln City, OR 97367",
         },
         {
           type: "camp",
@@ -459,4 +469,21 @@ const TRIP = {
       "Grab the free VIP \"Insider Savings\" coupon book at Lincoln City Outlets customer service.",
     ],
   },
+
+  // ===================================================================
+  // WHO'S COOKING — one row per night of the trip. Each family handles
+  // its own breakfast & lunch; sign up to cook (or mark eating out).
+  // Just fill in `cook` with a name, or set `eatingOut: true`.
+  // ===================================================================
+  dinners: [
+    { day: 1,  date: "Wed, Jul 29", place: "Burns, OR (en route)",        cook: null,  eatingOut: true  },
+    { day: 2,  date: "Thu, Jul 30", place: "Harbor Vista (arrival night)", cook: "TBD", eatingOut: false },
+    { day: 3,  date: "Fri, Jul 31", place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
+    { day: 4,  date: "Sat, Aug 1",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
+    { day: 5,  date: "Sun, Aug 2",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
+    { day: 6,  date: "Mon, Aug 3",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
+    { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
+    { day: 8,  date: "Wed, Aug 5",  place: "Harbor Vista (last night)",    cook: "TBD", eatingOut: false },
+    { day: 9,  date: "Thu, Aug 6",  place: "Burns, OR (en route home)",    cook: null,  eatingOut: true  },
+  ],
 };

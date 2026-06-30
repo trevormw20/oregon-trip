@@ -37,6 +37,68 @@ function money(n) {
 }
 
 // =====================================================================
+// CURRENT-DAY DETECTION — auto-select today's tab from the device date
+// =====================================================================
+let todayIndex = -1; // index of the trip day matching the device's date, or -1
+
+function dateOnly(d) {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+// Parse a trip day's date string ("Sunday, August 2, 2026") to local midnight.
+function parseTripDate(dateStr) {
+  const part = dateStr.includes(",")
+    ? dateStr.split(",").slice(1).join(",").trim()
+    : dateStr;
+  const d = new Date(part);
+  return isNaN(d) ? null : dateOnly(d);
+}
+
+// Pure: given "now", decide which day to show + whether today is in range.
+function computeDayInfo(now) {
+  const today = dateOnly(now);
+  const dates = TRIP.days.map(d => parseTripDate(d.date));
+  const first = dates[0];
+  const last = dates[dates.length - 1];
+
+  const exact = dates.findIndex(d => d && d.getTime() === today.getTime());
+  if (exact >= 0) {
+    return { status: "during", initialIndex: exact, todayIndex: exact };
+  }
+  if (first && today.getTime() < first.getTime()) {
+    const daysUntil = Math.round((first.getTime() - today.getTime()) / 86400000);
+    return { status: "before", initialIndex: 0, todayIndex: -1, daysUntil };
+  }
+  if (last && today.getTime() > last.getTime()) {
+    return { status: "after", initialIndex: dates.length - 1, todayIndex: -1 };
+  }
+  // Inside the span but no exact match (non-consecutive dates) — show the most
+  // recent day that has already started; no "Today" badge in that gap.
+  let idx = 0;
+  dates.forEach((d, i) => { if (d && d.getTime() <= today.getTime()) idx = i; });
+  return { status: "during", initialIndex: idx, todayIndex: -1 };
+}
+
+// Apply the computed info: set the active + today day and a small status note.
+function pickInitialDay(now) {
+  const info = computeDayInfo(now || new Date());
+  activeDayIndex = info.initialIndex;
+  todayIndex = info.todayIndex;
+
+  let note = "";
+  if (info.status === "before") {
+    note = `🧳 Trip starts in ${info.daysUntil} day${info.daysUntil === 1 ? "" : "s"} — showing Day 1.`;
+  } else if (info.status === "after") {
+    note = "🎉 Trip complete — welcome back! Showing the last day.";
+  } else if (info.todayIndex >= 0) {
+    note = `📍 Today is Day ${TRIP.days[info.todayIndex].day}.`;
+  }
+  const el = document.getElementById("trip-status");
+  if (el) el.textContent = note;
+  return info;
+}
+
+// =====================================================================
 // HEADER
 // =====================================================================
 function renderHeader() {
@@ -85,9 +147,10 @@ let activeDayIndex = 0;
 
 function renderTabs() {
   const tabs = TRIP.days.map((d, i) => `
-    <button class="day-tab ${i === activeDayIndex ? "active" : ""}" data-i="${i}">
+    <button class="day-tab ${i === activeDayIndex ? "active" : ""}${i === todayIndex ? " today" : ""}" data-i="${i}">
+      ${i === todayIndex ? `<span class="today-badge">Today</span>` : ""}
       <span class="day-num">Day ${d.day}</span>
-      ${shortDate(d.date)}
+      <span class="day-tab-when">${shortDate(d.date)} · ${weekdayFromDate(d.date)}</span>
     </button>
   `).join("");
   document.getElementById("day-tabs").innerHTML = tabs;
@@ -99,6 +162,12 @@ function renderTabs() {
       renderDayDetail();
     });
   });
+
+  // Keep the selected day visible in the horizontal scroller (phones)
+  const activeBtn = document.querySelector(".day-tab.active");
+  if (activeBtn && activeBtn.scrollIntoView) {
+    activeBtn.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+  }
 }
 
 function shortDate(dateStr) {
@@ -108,12 +177,33 @@ function shortDate(dateStr) {
   return `${m[1].slice(0, 3)} ${m[2]}`;
 }
 
+// Derive the weekday from the actual date so it's always correct,
+// even if someone edits the date in data.js. Drops any weekday already
+// written at the start of the string and recomputes from the real date.
+function weekdayFromDate(dateStr) {
+  const datePart = dateStr.includes(",")
+    ? dateStr.split(",").slice(1).join(",").trim() // "August 2, 2026"
+    : dateStr;
+  const d = new Date(datePart);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString("en-US", { weekday: "long" });
+}
+
 // =====================================================================
 // DAY DETAIL
 // =====================================================================
 function renderDayDetail() {
   const day = TRIP.days[activeDayIndex];
-  const el = document.getElementById("day-detail");
+  const el = document.getElementById("day-detail-body");
+  if (!el) return;
+  const isToday = activeDayIndex === todayIndex;
+
+  // Keep the collapsible header label in sync with the selected day,
+  // so the right day shows even when the section is collapsed.
+  const titleEl = document.getElementById("day-detail-title");
+  if (titleEl) {
+    titleEl.textContent = `Day ${day.day} · ${weekdayFromDate(day.date)}`;
+  }
 
   const itemsHtml = day.items.map(item => {
     const meta = TYPE_META[item.type] || TYPE_META.activity;
@@ -145,7 +235,7 @@ function renderDayDetail() {
     : "";
 
   el.innerHTML = `
-    <h2>Day ${day.day}: ${escapeHtml(day.title)}</h2>
+    <h2>Day ${day.day} · ${weekdayFromDate(day.date)}: ${escapeHtml(day.title)}${isToday ? ` <span class="today-badge inline">Today</span>` : ""}</h2>
     <p class="day-date">${escapeHtml(day.date)}</p>
     ${day.summary ? `<p class="day-summary">${escapeHtml(day.summary)}</p>` : ""}
     ${foodHtml}
@@ -185,10 +275,52 @@ function renderWishlist() {
 }
 
 // =====================================================================
+// WHO'S COOKING — dinner sign-up, one row per night of the trip
+// =====================================================================
+function renderDinners() {
+  const el = document.getElementById("cooking-section-body");
+  const list = TRIP.dinners || [];
+  if (!el) return;
+
+  const rows = list.map(d => {
+    const cookLabel = d.eatingOut
+      ? `🍽️ Eating out`
+      : (d.cook && d.cook !== "TBD"
+          ? `👩‍🍳 ${escapeHtml(d.cook)}`
+          : `<span class="cook-tbd">Sign up — TBD</span>`);
+    return `
+      <div class="cook-row ${d.eatingOut ? "out" : ""}">
+        <div class="cook-when">
+          <span class="cook-day">Day ${d.day}</span>
+          <span class="cook-date">${escapeHtml(d.date)}</span>
+        </div>
+        <div class="cook-place">${escapeHtml(d.place || "")}</div>
+        <div class="cook-who">${cookLabel}</div>
+      </div>
+    `;
+  }).join("");
+
+  el.innerHTML = `
+    <p class="cooking-help">
+      Each family handles its own breakfast &amp; lunch. Sign up to cook one
+      group dinner — or mark a night as eating out.
+    </p>
+    <div class="cook-list">
+      <div class="cook-row head">
+        <div class="cook-when">Night</div>
+        <div class="cook-place">Where</div>
+        <div class="cook-who">Cook</div>
+      </div>
+      ${rows}
+    </div>
+  `;
+}
+
+// =====================================================================
 // BUDGET / COSTS — per-attraction group breakdown + scenario totals
 // =====================================================================
 function renderBudget() {
-  const el = document.getElementById("budget-section");
+  const el = document.getElementById("budget-section-body");
   const b = TRIP.budget;
   if (!el || !b) return;
 
@@ -226,7 +358,6 @@ function renderBudget() {
   const tips = (b.tips || []).map(t => `<li>${escapeHtml(t)}</li>`).join("");
 
   el.innerHTML = `
-    <h2>Budget &amp; Costs</h2>
     ${b.groupSummary ? `<p class="budget-group">👨‍👩‍👧‍👦 ${escapeHtml(b.groupSummary)}</p>` : ""}
     ${b.excludeNote ? `<p class="budget-exclude">⛺ ${escapeHtml(b.excludeNote)}</p>` : ""}
 
@@ -246,6 +377,7 @@ function renderBudget() {
 // MAP — Leaflet
 // =====================================================================
 let map = null;
+let mapBounds = []; // remembered for invalidateSize/fitBounds when the map is revealed
 
 function renderMap() {
   // Collect all locations (home base + every item that has coords)
@@ -353,6 +485,7 @@ function renderMap() {
   }).addTo(map);
 
   // Fit map to show everything
+  mapBounds = bounds;
   if (bounds.length > 0) {
     map.fitBounds(bounds, { padding: [40, 40] });
   } else {
@@ -571,18 +704,117 @@ function escapeHtml(str) {
 }
 
 // =====================================================================
+// COLLAPSIBLE SECTIONS — tappable headers, state remembered per device
+// =====================================================================
+const COLLAPSE_KEY = "oregonTrip.collapsed";
+
+// First-time defaults (true = start collapsed). Keep the top of the page
+// useful on a phone; collapse the longer reference sections by default.
+// Once the user toggles a section, their choice is what's remembered.
+const COLLAPSE_DEFAULTS = {
+  "day-detail":       false,
+  "wishlist-section": false,
+  "cooking-section":  false,
+  "budget-section":   true,
+  "notes-section":    true,
+  "map-section":      true,
+};
+
+function loadCollapsed() {
+  try {
+    const raw = localStorage.getItem(COLLAPSE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return (parsed && typeof parsed === "object") ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveCollapsed(state) {
+  try {
+    localStorage.setItem(COLLAPSE_KEY, JSON.stringify(state));
+  } catch (e) {
+    /* storage full / disabled — ignore */
+  }
+}
+
+function applyCollapse(section, head, chevron, collapsed) {
+  section.classList.toggle("collapsed", collapsed);
+  if (head) head.setAttribute("aria-expanded", String(!collapsed));
+  if (chevron) chevron.textContent = collapsed ? "▸" : "▾";
+}
+
+// Leaflet renders tiles wrong if its container was hidden/zero-size when
+// created. Refresh size (and re-fit) once the map section is revealed.
+function refreshMap() {
+  if (!map) return;
+  setTimeout(() => {
+    map.invalidateSize();
+    if (mapBounds && mapBounds.length) {
+      map.fitBounds(mapBounds, { padding: [40, 40] });
+    }
+  }, 60);
+}
+
+function setupCollapsibles() {
+  const saved = loadCollapsed();
+
+  document.querySelectorAll(".sec-head").forEach(head => {
+    const id = head.dataset.section;
+    const section = document.getElementById(id);
+    if (!section) return;
+    const chevron = head.querySelector(".sec-chevron");
+
+    // Saved state wins; otherwise fall back to the first-time default.
+    const collapsed = (id in saved) ? !!saved[id] : !!COLLAPSE_DEFAULTS[id];
+    applyCollapse(section, head, chevron, collapsed);
+
+    head.addEventListener("click", () => {
+      const nowCollapsed = !section.classList.contains("collapsed");
+      applyCollapse(section, head, chevron, nowCollapsed);
+      const state = loadCollapsed();
+      state[id] = nowCollapsed;
+      saveCollapsed(state);
+      if (id === "map-section" && !nowCollapsed) refreshMap();
+    });
+  });
+}
+
+// Quick-nav still jumps to each section; if the target is collapsed, expand
+// it (visually) so the content is visible on arrival. Doesn't overwrite the
+// saved preference — only deliberate header taps do that.
+function setupQuickNav() {
+  document.querySelectorAll(".quick-nav a").forEach(link => {
+    link.addEventListener("click", () => {
+      const id = (link.getAttribute("href") || "").slice(1);
+      const section = document.getElementById(id);
+      if (section && section.classList.contains("collapsed")) {
+        const head = section.querySelector(".sec-head");
+        const chevron = head && head.querySelector(".sec-chevron");
+        applyCollapse(section, head, chevron, false);
+        if (id === "map-section") refreshMap();
+      }
+    });
+  });
+}
+
+// =====================================================================
 // BOOT
 // =====================================================================
 document.addEventListener("DOMContentLoaded", async () => {
   renderHeader();
   renderStats();
+  pickInitialDay();            // auto-select today's day (or sensible default)
   renderTabs();
   renderDayDetail();
-  renderBudget();
   renderWishlist();
+  renderDinners();
+  renderBudget();
   await maybeSeedNotes();
   setupNotes();
   renderNoteList("schedule");
   renderNoteList("questions");
   renderMap();
+  setupCollapsibles();         // after renderMap so the map var exists
+  setupQuickNav();
 });

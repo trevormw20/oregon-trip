@@ -23,8 +23,20 @@
       <h1 id="trip-title">Loading…</h1>
       <p id="trip-subtitle"></p>
       <p id="trip-family"></p>
+      <p id="trip-status" class="trip-status"></p>
     </div>
   </header>
+
+  <!-- Quick-jump nav: thumb-reachable on phones (fixed bottom),
+       sticky top bar on desktop. Hops between the main sections. -->
+  <nav class="quick-nav" id="quick-nav" aria-label="Jump to section">
+    <a href="#day-tabs"><span class="qn-icon">📅</span><span class="qn-label">Days</span></a>
+    <a href="#wishlist-section"><span class="qn-icon">⭐</span><span class="qn-label">Wish</span></a>
+    <a href="#cooking-section"><span class="qn-icon">🍳</span><span class="qn-label">Cook</span></a>
+    <a href="#budget-section"><span class="qn-icon">💰</span><span class="qn-label">Budget</span></a>
+    <a href="#notes-section"><span class="qn-icon">📝</span><span class="qn-label">Notes</span></a>
+    <a href="#map-section"><span class="qn-icon">🗺️</span><span class="qn-label">Map</span></a>
+  </nav>
 
   <nav class="day-tabs" id="day-tabs"></nav>
 
@@ -33,88 +45,122 @@
     <!-- Trip stats: total days, miles, cost -->
     <section class="stats" id="stats"></section>
 
-    <!-- Selected day details -->
-    <section class="day-detail" id="day-detail"></section>
-
-    <!-- Budget / costs: per-attraction group breakdown + scenario totals -->
-    <section class="budget-section" id="budget-section"></section>
-
-    <!-- Wish list: places to visit, no day picked yet -->
-    <section class="wishlist-section" id="wishlist-section">
-      <h2>Places We Want to Visit</h2>
-      <p class="wishlist-help">No day picked yet — grab one for a day, then tell the group!</p>
-      <div class="wishlist-grid" id="wishlist-grid"></div>
+    <!-- Selected day details (collapsible) -->
+    <section class="day-detail collapsible" id="day-detail">
+      <button class="sec-head" type="button" data-section="day-detail" aria-expanded="true">
+        <span class="sec-title" id="day-detail-title">Day Details</span>
+        <span class="sec-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="sec-body" id="day-detail-body"></div>
     </section>
 
-    <!-- Family notes: schedule changes + questions -->
-    <section class="notes-section">
-      <div class="notes-header">
-        <h2>Family Notes</h2>
+    <!-- Wish list: places to visit, no day picked yet (collapsible) -->
+    <section class="wishlist-section collapsible" id="wishlist-section">
+      <button class="sec-head" type="button" data-section="wishlist-section" aria-expanded="true">
+        <span class="sec-title">Places We Want to Visit</span>
+        <span class="sec-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="sec-body" id="wishlist-section-body">
+        <p class="wishlist-help">No day picked yet — grab one for a day, then tell the group!</p>
+        <div class="wishlist-grid" id="wishlist-grid"></div>
+      </div>
+    </section>
+
+    <!-- Who's cooking: dinner sign-up, one row per trip night (collapsible) -->
+    <section class="cooking-section collapsible" id="cooking-section">
+      <button class="sec-head" type="button" data-section="cooking-section" aria-expanded="true">
+        <span class="sec-title">Who's Cooking</span>
+        <span class="sec-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="sec-body" id="cooking-section-body"></div>
+    </section>
+
+    <!-- Budget / costs: per-attraction group breakdown + scenario totals (collapsible) -->
+    <section class="budget-section collapsible" id="budget-section">
+      <button class="sec-head" type="button" data-section="budget-section" aria-expanded="true">
+        <span class="sec-title">Budget &amp; Costs</span>
+        <span class="sec-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="sec-body" id="budget-section-body"></div>
+    </section>
+
+    <!-- Family notes: schedule changes + questions (collapsible) -->
+    <section class="notes-section collapsible" id="notes-section">
+      <button class="sec-head" type="button" data-section="notes-section" aria-expanded="true">
+        <span class="sec-title">Family Notes</span>
+        <span class="sec-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="sec-body" id="notes-section-body">
         <div class="notes-toolbar">
           <input type="text" id="note-author" placeholder="Your name (optional)" />
           <button class="notes-btn" id="export-notes" title="Download notes as JSON to commit to the repo">⬇ Export</button>
           <button class="notes-btn" id="import-notes" title="Load notes from a JSON file">⬆ Import</button>
           <input type="file" id="import-file" accept="application/json" hidden />
         </div>
-      </div>
 
-      <div class="notes-grid">
-        <!-- Schedule changes column -->
-        <div class="notes-column" data-kind="schedule">
-          <div class="notes-column-head schedule-head">
-            <span class="notes-icon">📝</span>
-            <div>
-              <h3>Schedule Changes</h3>
-              <p class="notes-sub">Updates, swaps, time changes</p>
+        <div class="notes-grid">
+          <!-- Schedule changes column -->
+          <div class="notes-column" data-kind="schedule">
+            <div class="notes-column-head schedule-head">
+              <span class="notes-icon">📝</span>
+              <div>
+                <h3>Schedule Changes</h3>
+                <p class="notes-sub">Updates, swaps, time changes</p>
+              </div>
             </div>
+            <form class="note-add-form" data-kind="schedule">
+              <textarea placeholder="e.g., Moved Cannon Beach to morning so we beat the crowds" rows="2" required></textarea>
+              <button type="submit" class="add-note-btn">＋ Add Change</button>
+            </form>
+            <ul class="note-list" id="notes-schedule"></ul>
           </div>
-          <form class="note-add-form" data-kind="schedule">
-            <textarea placeholder="e.g., Moved Cannon Beach to morning so we beat the crowds" rows="2" required></textarea>
-            <button type="submit" class="add-note-btn">＋ Add Change</button>
-          </form>
-          <ul class="note-list" id="notes-schedule"></ul>
+
+          <!-- Family questions column -->
+          <div class="notes-column" data-kind="questions">
+            <div class="notes-column-head questions-head">
+              <span class="notes-icon">❓</span>
+              <div>
+                <h3>Family Questions</h3>
+                <p class="notes-sub">Stuff to figure out before we go</p>
+              </div>
+            </div>
+            <form class="note-add-form" data-kind="questions">
+              <textarea placeholder="e.g., Do we need bear spray for the campground?" rows="2" required></textarea>
+              <button type="submit" class="add-note-btn">＋ Add Question</button>
+            </form>
+            <ul class="note-list" id="notes-questions"></ul>
+          </div>
         </div>
 
-        <!-- Family questions column -->
-        <div class="notes-column" data-kind="questions">
-          <div class="notes-column-head questions-head">
-            <span class="notes-icon">❓</span>
-            <div>
-              <h3>Family Questions</h3>
-              <p class="notes-sub">Stuff to figure out before we go</p>
-            </div>
-          </div>
-          <form class="note-add-form" data-kind="questions">
-            <textarea placeholder="e.g., Do we need bear spray for the campground?" rows="2" required></textarea>
-            <button type="submit" class="add-note-btn">＋ Add Question</button>
-          </form>
-          <ul class="note-list" id="notes-questions"></ul>
-        </div>
+        <p class="notes-help">
+          Notes auto-save to this browser.
+          Click <strong>Export</strong> to download a JSON file you can commit to the GitHub repo —
+          anyone else with the repo can <strong>Import</strong> it to see all the notes.
+        </p>
       </div>
-
-      <p class="notes-help">
-        Notes auto-save to this browser.
-        Click <strong>Export</strong> to download a JSON file you can commit to the GitHub repo —
-        anyone else with the repo can <strong>Import</strong> it to see all the notes.
-      </p>
     </section>
 
-    <!-- Interactive map showing ALL trip locations -->
-    <section class="map-section">
-      <h2>The Whole Trip on a Map</h2>
-      <p class="map-help">
-        Click any pin to see what we're doing there.
-        Hit the <strong>Open in Google Maps</strong> button to get driving directions.
-      </p>
-      <div id="map"></div>
+    <!-- Interactive map showing ALL trip locations (collapsible) -->
+    <section class="map-section collapsible" id="map-section">
+      <button class="sec-head" type="button" data-section="map-section" aria-expanded="true">
+        <span class="sec-title">The Whole Trip on a Map</span>
+        <span class="sec-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="sec-body" id="map-section-body">
+        <p class="map-help">
+          Click any pin to see what we're doing there.
+          Hit the <strong>Open in Google Maps</strong> button to get driving directions.
+        </p>
+        <div id="map"></div>
 
-      <div class="map-legend">
-        <span class="legend-item"><span class="legend-dot" style="background:#ff6b6b"></span>Activity</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#ffa94d"></span>Food</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#4dabf7"></span>Lodging</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#37b24d"></span>Camping</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#9775fa"></span>Drive</span>
-        <span class="legend-item"><span class="legend-dot" style="background:#212529"></span>Home Base</span>
+        <div class="map-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#ff6b6b"></span>Activity</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#ffa94d"></span>Food</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#4dabf7"></span>Lodging</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#37b24d"></span>Camping</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#9775fa"></span>Drive</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#212529"></span>Home Base</span>
+        </div>
       </div>
     </section>
 

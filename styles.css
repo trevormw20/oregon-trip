@@ -40,6 +40,20 @@ html, body {
   min-height: 100vh;
 }
 
+html { scroll-behavior: smooth; }
+
+/* Leave room so the fixed bottom quick-nav never covers content on phones.
+   Removed at the desktop breakpoint where the nav becomes a top bar. */
+body { padding-bottom: 78px; }
+
+/* Jump targets clear the sticky desktop nav when anchor-scrolled to. */
+#day-tabs,
+#wishlist-section,
+#cooking-section,
+#budget-section,
+#notes-section,
+#map-section { scroll-margin-top: 72px; }
+
 /* =========================================================
    HEADER
    ========================================================= */
@@ -90,12 +104,21 @@ html, body {
    ========================================================= */
 .day-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 10px;
-  justify-content: center;
-  padding: 16px 20px 24px;
+  padding: 14px 16px 18px;
   max-width: 1100px;
   margin: 0 auto;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.day-tabs::-webkit-scrollbar { height: 6px; }
+.day-tabs::-webkit-scrollbar-thumb {
+  background: rgba(43, 45, 66, 0.2);
+  border-radius: 999px;
 }
 
 .day-tab {
@@ -104,12 +127,22 @@ html, body {
   font-size: 15px;
   background: var(--color-cloud);
   border: 3px solid transparent;
-  border-radius: 999px;
-  padding: 10px 18px;
+  border-radius: 18px;
+  padding: 12px 18px;
   cursor: pointer;
   box-shadow: var(--shadow-soft);
   color: var(--color-ink);
   transition: transform 0.15s ease, border-color 0.2s, background 0.2s;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  text-align: center;
+  white-space: nowrap;
+  min-height: 52px;
+}
+
+.day-tab-when {
+  display: block;
+  white-space: nowrap;
 }
 
 .day-tab:hover {
@@ -1024,6 +1057,255 @@ html, body {
 }
 
 /* =========================================================
+   TRIP STATUS NOTE (under the header)
+   ========================================================= */
+.trip-status {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.7);
+  display: inline-block;
+  margin: 10px auto 0;
+  padding: 5px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  box-shadow: var(--shadow-soft);
+}
+.trip-status:empty { display: none; }
+
+/* =========================================================
+   "TODAY" MARKER (day tabs + day-detail heading)
+   ========================================================= */
+.today-badge {
+  display: inline-block;
+  background: var(--color-coral);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  line-height: 1.5;
+}
+
+.day-tab .today-badge {
+  display: block;
+  margin: 0 auto 4px;
+  width: max-content;
+}
+
+.today-badge.inline {
+  font-size: 12px;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.day-tab.today { border-color: var(--color-coral); }
+
+/* =========================================================
+   COLLAPSIBLE SECTION HEADERS
+   ========================================================= */
+.sec-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-ink);
+  text-align: left;
+  padding: 4px 0;
+  min-height: 48px; /* big touch target for phones */
+}
+
+.sec-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.15;
+}
+
+.sec-chevron {
+  flex: 0 0 auto;
+  font-size: 16px;
+  color: #868e96;
+}
+
+/* Hide the body when collapsed; tighten the bottom padding to a neat bar */
+.collapsible.collapsed > .sec-body { display: none; }
+.collapsible.collapsed { padding-bottom: 14px; }
+
+/* Toolbar sits at the top of the notes body now that the old header is gone */
+.sec-body .notes-toolbar { margin-bottom: 16px; }
+
+/* =========================================================
+   QUICK-JUMP NAV
+   Mobile-first: fixed bottom bar (thumb-reachable).
+   Desktop (>=641px): sticky bar under the header.
+   ========================================================= */
+.quick-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-around;
+  gap: 2px;
+  background: var(--color-cloud);
+  border-top: 3px solid var(--color-sun);
+  box-shadow: 0 -4px 16px rgba(43, 45, 66, 0.14);
+  padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+}
+
+.quick-nav a {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 11px;
+  padding: 6px 2px;
+  border-radius: var(--radius-sm);
+}
+
+.quick-nav a:active { background: var(--color-mist); }
+.quick-nav a:hover  { background: var(--color-mist); }
+
+.qn-icon  { font-size: 20px; line-height: 1; }
+.qn-label { letter-spacing: 0.3px; }
+
+@media (min-width: 641px) {
+  body { padding-bottom: 0; }
+
+  .quick-nav {
+    position: sticky;
+    top: 0;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    max-width: 1100px;
+    margin: 0 auto 10px;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-top: none;
+    border-bottom: 3px solid var(--color-sun);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .quick-nav a {
+    flex: 0 0 auto;
+    flex-direction: row;
+    gap: 6px;
+    font-size: 14px;
+    min-height: 0;
+    padding: 8px 16px;
+  }
+
+  .qn-icon { font-size: 16px; }
+}
+
+/* =========================================================
+   WHO'S COOKING
+   ========================================================= */
+.cooking-section {
+  background: var(--color-cloud);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-pop);
+  margin-bottom: 36px;
+  border-top: 8px solid var(--color-orange);
+}
+
+.cooking-section h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin: 0 0 4px;
+  font-size: 28px;
+}
+
+.cooking-help {
+  color: #6c757d;
+  margin: 0 0 18px;
+  font-size: 15px;
+}
+
+.cook-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cook-row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  background: var(--color-mist);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  border-left: 5px solid var(--color-orange);
+}
+
+.cook-row.out {
+  border-left-color: var(--color-sky);
+}
+
+.cook-row.head {
+  background: transparent;
+  border-left: none;
+  padding: 2px 14px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #868e96;
+}
+
+.cook-when {
+  display: flex;
+  flex-direction: column;
+}
+
+.cook-day {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.cook-date {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.cook-place {
+  font-size: 14px;
+}
+
+.cook-who {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cook-tbd { color: var(--color-coral); }
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 @media (max-width: 640px) {
@@ -1045,8 +1327,43 @@ html, body {
     justify-content: space-between;
     align-items: center;
   }
-  #map { height: 360px; }
+  #map { height: 340px; }
   .notes-grid { grid-template-columns: 1fr; }
   .notes-header { flex-direction: column; align-items: flex-start; }
   #note-author { width: 100%; }
+
+  /* --- Mobile-first usability tweaks --- */
+  .trip-header { padding: 26px 16px 10px; }
+  .trip-header::before { font-size: 44px; }
+
+  .dashboard { padding: 0 12px 40px; }
+
+  /* Tighter section chrome = more usable width on a phone */
+  .day-detail,
+  .wishlist-section,
+  .cooking-section,
+  .budget-section,
+  .notes-section,
+  .map-section { padding: 20px 16px; }
+
+  /* Slightly smaller section headings so they don't crowd narrow screens */
+  .sec-title { font-size: 21px; }
+  .day-detail h2,
+  .wishlist-section h2,
+  .cooking-section h2,
+  .budget-section h2,
+  .map-section h2 { font-size: 23px; }
+
+  /* Single-column grids */
+  .wishlist-grid { grid-template-columns: 1fr; }
+  .scenario-grid { grid-template-columns: 1fr; }
+
+  /* Comfortable tap targets */
+  .maps-btn,
+  .add-note-btn,
+  .notes-btn { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* Who's-cooking rows: tighter columns on narrow screens */
+  .cook-row { grid-template-columns: 78px 1fr auto; gap: 8px; padding: 11px 12px; }
+  .cook-place { font-size: 13px; }
 }
