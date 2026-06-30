@@ -175,7 +175,7 @@ const TRIP = {
           type: "activity",
           name: "Heceta Head Lighthouse",
           time: "Daytime",
-          notes: "No cost. Group send-off day — one family heads home this evening, around the little kids' bedtime.",
+          notes: "No cost — just the hike up to see the lighthouse, not the paid museum / keeper's-house tour. Group send-off day — one family heads home this evening, around the little kids' bedtime.",
           cost: 0,
           coords: [44.1372, -124.1283],
           mapsDest: "Heceta Head Lighthouse, Florence, OR",
@@ -353,7 +353,7 @@ const TRIP = {
     {
       type: "food",
       name: "Mo's Seafood & Chowder",
-      notes: "On the plan — famous clam chowder. We could go more than once!",
+      notes: "On the plan — famous clam chowder. This is our group eat-out dinner one night (night TBD — see Who's Cooking). We could go more than once!",
       coords: [43.9686, -124.1018],
       mapsDest: "Mo's Seafood & Chowder, 1436 Bay St, Florence, OR 97439",
     },
@@ -366,107 +366,106 @@ const TRIP = {
   ],
 
   // ===================================================================
-  // BUDGET / COSTS — per-attraction group cost breakdown (2026).
-  // All figures are GROUP totals for our party. Edit the age-tier
-  // counts here if the group or plans change. Camping is already
-  // booked & paid, so it's excluded; campsite receipts usually cover
-  // Oregon state-park day-use parking.
+  // BUDGET / COSTS — per-attraction ADMISSION PRICES by age tier (2026,
+  // confirmed from official sites). These are individual ticket prices,
+  // NOT group totals. Each attraction has a `prices` array of age tiers.
+  // Camping is already booked & paid, so it's excluded; campsite receipts
+  // usually cover Oregon state-park day-use parking.
+  //   `prices`: [{ tier, price, ages }]  — set price "Free" for free tiers
+  //   `toConfirm: true`               — flag a price to double-check at the gate
+  //   `isAlternative: true`           — styled as an alternative option
   // ===================================================================
   budget: {
     groupSummary:
       "16 people — 8 adults, 1 age 17, 1 age 14, 3 kids under 8, two 2-year-olds, one 1-year-old · 3 vehicles",
     excludeNote:
-      "Camping is already booked & paid, so it's left out below. Campsite receipts usually cover Oregon state-park day-use parking.",
+      "Prices below are per-person admission (or per-vehicle parking), not totals. Camping is already booked & paid; campsite receipts usually cover Oregon state-park day-use parking.",
 
-    // Each attraction's group cost. `cost` is the headline group total
-    // used in the scenario math; `altCost` is an optional discounted/
-    // alternate figure shown alongside.
     attractions: [
       {
         name: "Oregon Coast Aquarium (Newport)",
         type: "activity",
-        cost: 295.35,
-        costLabel: "$295.35 walk-up",
-        altLabel: "≈ $266 with 10% discount",
-        who: "Adult $25.95 ×8 · Youth 13–17 $19.95 ×2 · Child 3–12 $15.95 ×3 · free 0–2 ×3",
-        note: "10% AAA / military / one-card discount ≈ $266. The 15+ group rate is quote-only — call ahead, could be cheaper.",
+        prices: [
+          { tier: "Adult",  ages: "18–64", price: "$25.95", toConfirm: true },
+          { tier: "Senior", ages: "65+",   price: "$19.95" },
+          { tier: "Youth",  ages: "13–17", price: "$19.95" },
+          { tier: "Child",  ages: "3–12",  price: "$15.95", toConfirm: true },
+          { tier: "Under 3", ages: "0–2",  price: "Free" },
+        ],
+        note: "*Confirm prices at the gate — one source shows $24.95 adult / $14.95 child. AAA / military / group discounts may apply.",
       },
       {
         name: "Sea Lion Caves (Florence)",
         type: "activity",
-        cost: 216,
-        costLabel: "$216",
-        who: "Adult 13+ $18 ×10 · Child 5–12 $12 ×3 · free 0–4",
-        note: "No youth rate here, so the teens pay the adult price.",
+        prices: [
+          { tier: "Adult",  ages: "13+",  price: "$18" },
+          { tier: "Senior", ages: "—",    price: "$17" },
+          { tier: "Child",  ages: "5–12", price: "$12" },
+          { tier: "Under 5", ages: "0–4", price: "Free" },
+        ],
+        note: "Parking is free. No cutoff age stated for the senior rate.",
       },
       {
         name: "Umpqua River Lighthouse (alt. to Sea Lion Caves)",
         type: "activity",
-        cost: 84,
-        costLabel: "$84",
-        who: "Adult $8 ×8 · Child/Student 5–17 $4 ×5 · free 0–4",
-        note: "Swapping Sea Lion Caves → Umpqua saves ≈ $132. About 45 min south of Harbor Vista.",
         isAlternative: true,
+        prices: [
+          { tier: "Adult",          ages: "18+",  price: "$8" },
+          { tier: "Student / Child", ages: "5–17", price: "$4" },
+          { tier: "Under 5",        ages: "0–4",  price: "Free" },
+        ],
+        note: "No senior tier — seniors pay the adult rate. About 45 min south of Harbor Vista.",
       },
       {
-        name: "Cape Perpetua — parking (federal)",
+        name: "Cape Perpetua — parking",
         type: "drive",
-        cost: 15,
-        costLabel: "$15",
-        who: "$5 / vehicle ×3",
-        note: "Federal day-use site, so the state-park campsite receipt does NOT cover it.",
+        prices: [
+          { tier: "Per vehicle", ages: "per day", price: "$5" },
+        ],
+        note: "Federal day-use fee — or covered by a NW Forest Pass / interagency pass.",
       },
       {
-        name: "Heceta Head — parking (state)",
+        name: "Heceta Head Lighthouse — parking",
         type: "drive",
-        cost: 0,
-        costLabel: "Likely $0",
-        altLabel: "worst case $15",
-        who: "$5 / vehicle ×3 if not covered",
-        note: "State-park day-use — campsite receipt usually covers it. Worst case $15.",
+        prices: [
+          { tier: "Per vehicle", ages: "per day", price: "$10" },
+        ],
+        note: "Oregon State Parks day-use fee — or covered by a day-use permit.",
       },
       {
         name: "Hobbit Trail",
         type: "activity",
-        cost: 0,
-        costLabel: "Free",
-        who: "Roadside trailhead, no fee",
-        note: "",
+        prices: [
+          { tier: "Everyone", ages: "all ages", price: "Free" },
+        ],
+        note: "Free trailhead parking (~10 spots); overflow at Heceta Head.",
       },
       {
         name: "Lincoln City Outlets",
         type: "activity",
-        cost: 0,
-        costLabel: "Free",
-        who: "Shopping — no admission",
-        note: "Grab the free VIP \"Insider Savings\" coupon book at customer service.",
-      },
-    ],
-
-    // Two whole-trip scenarios. `total` is the expected group cost;
-    // `max` is the worst case (e.g. if Heceta parking isn't covered).
-    scenarios: [
-      {
-        label: "As planned (Sea Lion Caves)",
-        total: 497,
-        max: 512,
-        note: "Up to ≈ $512 if the Heceta Head parking isn't covered.",
-      },
-      {
-        label: "Swap to Umpqua River Lighthouse",
-        total: 365,
-        max: 380,
-        note: "Up to ≈ $380 worst case — about $130 cheaper than the plan above.",
-        best: true,
+        prices: [
+          { tier: "Everyone", ages: "all ages", price: "Free" },
+        ],
+        note: "Grab the free VIP coupon book at Customer Service.",
       },
     ],
 
     tips: [
       "Toddlers are free everywhere (ages 0–2), and under-5 is free at Sea Lion Caves and Umpqua.",
-      "Take the Aquarium's 10% AAA/military/one-card discount, and call ahead for the 15+ group rate — it could be cheaper.",
-      "Swapping Sea Lion Caves for Umpqua River Lighthouse saves the group about $130.",
-      "Pay parking per-day, not with annual passes — we're only here a few days.",
-      "Grab the free VIP \"Insider Savings\" coupon book at Lincoln City Outlets customer service.",
+      "Swapping Sea Lion Caves → Umpqua River Lighthouse is much cheaper per person (Adult $8 vs $18, Child $4 vs $12).",
+      "The Aquarium has separate senior (65+) and youth (13–17) rates, plus AAA / military / group discounts — ask before you pay.",
+      "Pay parking per-day rather than buying annual passes — we're only here a few days.",
+      "Grab the free VIP coupon book at Lincoln City Outlets Customer Service.",
+    ],
+
+    // Optional source links shown as a small footnote.
+    sources: [
+      { label: "Sea Lion Caves", url: "https://www.sealioncaves.com/" },
+      { label: "Umpqua River Lighthouse", url: "https://www.umpquavalleymuseums.org/umpqua-river-lighthouse/" },
+      { label: "Cape Perpetua", url: "https://www.fs.usda.gov/recarea/siuslaw/recarea/?recid=42283" },
+      { label: "Heceta Head Lighthouse", url: "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=124" },
+      { label: "Oregon Coast Aquarium", url: "https://aquarium.org/" },
+      { label: "Lincoln City Outlets", url: "https://www.lincolncityoutlets.com/" },
     ],
   },
 
@@ -485,5 +484,17 @@ const TRIP = {
     { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
     { day: 8,  date: "Wed, Aug 5",  place: "Harbor Vista (last night)",    cook: "TBD", eatingOut: false },
     { day: 9,  date: "Thu, Aug 6",  place: "Burns, OR (en route home)",    cook: null,  eatingOut: true  },
+
+    // Group eat-out dinner — Mo's, one of the camping nights. Night not yet
+    // decided: to schedule it, set `day` + `date` (e.g. day: 5, date: "Sun, Aug 2"),
+    // or fold it into one of the Harbor Vista nights above.
+    {
+      date: "Night TBD",
+      place: "Mo's Seafood & Chowder (Florence)",
+      address: "1436 Bay St, Florence, OR 97439",
+      mapsDest: "Mo's Seafood & Chowder, 1436 Bay St, Florence, OR 97439",
+      cook: null,
+      eatingOut: true,
+    },
   ],
 };

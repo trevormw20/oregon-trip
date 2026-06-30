@@ -175,46 +175,47 @@ body { padding-bottom: 78px; }
   padding: 0 20px 40px;
 }
 
-/* ----------- Stats strip ----------- */
+/* ----------- Stats strip (compact) ----------- */
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px;
-  margin-bottom: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
 .stat-card {
   background: var(--color-cloud);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 12px 10px;
   box-shadow: var(--shadow-soft);
   text-align: center;
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   transition: transform 0.2s, border-color 0.2s;
 }
 
 .stat-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--color-sun);
 }
 
 .stat-icon {
-  font-size: 32px;
+  font-size: 22px;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .stat-value {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 28px;
+  font-size: 22px;
   color: var(--color-coral);
+  line-height: 1.1;
 }
 
 .stat-label {
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   color: #6c757d;
 }
 
@@ -880,10 +881,6 @@ body { padding-bottom: 78px; }
 }
 
 .budget-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
   background: var(--color-mist);
   border-radius: var(--radius-md);
   padding: 14px 16px;
@@ -896,135 +893,89 @@ body { padding-bottom: 78px; }
   background: #eef7ff;
 }
 
-.budget-row-main {
+.budget-row-head {
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
 .budget-emoji {
-  font-size: 24px;
+  font-size: 22px;
   line-height: 1.2;
   flex-shrink: 0;
 }
 
 .budget-name {
   font-family: var(--font-display);
-  font-weight: 600;
-  margin: 0 0 2px;
+  font-weight: 700;
+  margin: 0;
   font-size: 16px;
 }
 
-.budget-who {
-  margin: 0 0 4px;
-  font-size: 13px;
-  color: #495057;
+/* --- Age-tier price list (per attraction, no totals) --- */
+.price-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
+.price-tier {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 4px 0;
+  border-bottom: 1px dotted rgba(43, 45, 66, 0.12);
+}
+
+.price-tier:last-child { border-bottom: none; }
+
+.tier-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.tier-ages {
+  font-weight: 500;
+  font-size: 12px;
+  color: #868e96;
+}
+
+.tier-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.tier-price.free { color: var(--color-tree); }
+
 .budget-note {
-  margin: 0;
+  margin: 8px 0 0;
   font-size: 12.5px;
   color: #868e96;
   font-style: italic;
 }
 
-.budget-price {
-  text-align: right;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.budget-cost {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--color-ink);
-  white-space: nowrap;
-}
-
-.budget-price.free .budget-cost {
-  color: var(--color-tree);
-}
-
-.budget-altcost {
+/* --- Source footnote --- */
+.budget-sources {
+  margin: 18px 0 0;
   font-size: 12px;
-  color: var(--color-sky);
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-/* --- Scenario totals --- */
-.scenario-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin-bottom: 26px;
-}
-
-.scenario-card {
-  position: relative;
-  background: var(--color-paper);
-  border: 3px solid var(--color-mist);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  text-align: center;
-}
-
-.scenario-card.best {
-  border-color: var(--color-tree);
-  background: #ebfbee;
-  box-shadow: var(--shadow-soft);
-}
-
-.scenario-badge {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--color-tree);
-  color: white;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 12px;
-  padding: 3px 12px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-.scenario-label {
-  font-family: var(--font-display);
-  font-weight: 600;
-  margin: 4px 0 6px;
-  font-size: 15px;
-  color: #495057;
-}
-
-.scenario-total {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 38px;
-  margin: 0;
-  color: var(--color-ink);
-}
-
-.scenario-card.best .scenario-total {
-  color: var(--color-tree);
-}
-
-.scenario-max {
-  margin: 2px 0 6px;
-  font-size: 13px;
   color: #868e96;
+  line-height: 1.6;
 }
 
-.scenario-note {
-  margin: 0;
-  font-size: 13px;
-  color: #6c757d;
+.budget-sources a {
+  color: var(--color-sky);
+  text-decoration: none;
 }
+
+.budget-sources a:hover { text-decoration: underline; }
 
 /* --- Money-saving tips --- */
 .budget-tips {
@@ -1293,6 +1244,21 @@ body { padding-bottom: 78px; }
 
 .cook-place {
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.cook-addr {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.cook-place .cook-dir {
+  margin-top: 2px;
+  font-size: 12px;
+  padding: 5px 12px;
 }
 
 .cook-who {
@@ -1312,15 +1278,6 @@ body { padding-bottom: 78px; }
   .item {
     grid-template-columns: 50px 1fr;
   }
-  .budget-row {
-    flex-direction: column;
-  }
-  .budget-price {
-    text-align: left;
-    align-items: flex-start;
-    flex-direction: row;
-    gap: 10px;
-  }
   .item-actions {
     grid-column: 1 / -1;
     flex-direction: row;
@@ -1335,6 +1292,17 @@ body { padding-bottom: 78px; }
   /* --- Mobile-first usability tweaks --- */
   .trip-header { padding: 26px 16px 10px; }
   .trip-header::before { font-size: 44px; }
+
+  /* Compact stats: one tight 4-across row instead of a tall stack */
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .stat-card { padding: 8px 4px; }
+  .stat-icon { font-size: 17px; margin-bottom: 1px; }
+  .stat-value { font-size: 16px; }
+  .stat-label { font-size: 9px; letter-spacing: 0.2px; line-height: 1.15; }
 
   .dashboard { padding: 0 12px 40px; }
 
