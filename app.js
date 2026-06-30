@@ -185,6 +185,64 @@ function renderWishlist() {
 }
 
 // =====================================================================
+// BUDGET / COSTS — per-attraction group breakdown + scenario totals
+// =====================================================================
+function renderBudget() {
+  const el = document.getElementById("budget-section");
+  const b = TRIP.budget;
+  if (!el || !b) return;
+
+  const rows = (b.attractions || []).map(a => {
+    const meta = TYPE_META[a.type] || TYPE_META.activity;
+    const isFree = Number(a.cost) === 0;
+    return `
+      <div class="budget-row ${a.isAlternative ? "alt" : ""}">
+        <div class="budget-row-main">
+          <span class="budget-emoji">${meta.emoji}</span>
+          <div class="budget-row-text">
+            <p class="budget-name">${escapeHtml(a.name)}</p>
+            ${a.who ? `<p class="budget-who">${escapeHtml(a.who)}</p>` : ""}
+            ${a.note ? `<p class="budget-note">${escapeHtml(a.note)}</p>` : ""}
+          </div>
+        </div>
+        <div class="budget-price ${isFree ? "free" : ""}">
+          <span class="budget-cost">${escapeHtml(a.costLabel || money(a.cost))}</span>
+          ${a.altLabel ? `<span class="budget-altcost">${escapeHtml(a.altLabel)}</span>` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const scenarios = (b.scenarios || []).map(s => `
+    <div class="scenario-card ${s.best ? "best" : ""}">
+      ${s.best ? `<span class="scenario-badge">💸 Cheapest</span>` : ""}
+      <p class="scenario-label">${escapeHtml(s.label)}</p>
+      <p class="scenario-total">~${money(s.total)}</p>
+      ${s.max && s.max !== s.total ? `<p class="scenario-max">up to ~${money(s.max)}</p>` : ""}
+      ${s.note ? `<p class="scenario-note">${escapeHtml(s.note)}</p>` : ""}
+    </div>
+  `).join("");
+
+  const tips = (b.tips || []).map(t => `<li>${escapeHtml(t)}</li>`).join("");
+
+  el.innerHTML = `
+    <h2>Budget &amp; Costs</h2>
+    ${b.groupSummary ? `<p class="budget-group">👨‍👩‍👧‍👦 ${escapeHtml(b.groupSummary)}</p>` : ""}
+    ${b.excludeNote ? `<p class="budget-exclude">⛺ ${escapeHtml(b.excludeNote)}</p>` : ""}
+
+    <div class="budget-list">${rows}</div>
+
+    <div class="scenario-grid">${scenarios}</div>
+
+    ${tips ? `
+      <div class="budget-tips">
+        <h3>💡 Money-Saving Tips</h3>
+        <ul>${tips}</ul>
+      </div>` : ""}
+  `;
+}
+
+// =====================================================================
 // MAP — Leaflet
 // =====================================================================
 let map = null;
@@ -520,6 +578,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderStats();
   renderTabs();
   renderDayDetail();
+  renderBudget();
   renderWishlist();
   await maybeSeedNotes();
   setupNotes();

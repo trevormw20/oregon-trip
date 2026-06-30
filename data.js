@@ -95,16 +95,17 @@ const TRIP = {
     {
       day: 3,
       date: "Friday, July 31, 2026",
-      title: "Explore Florence",
-      summary: "First full day on the coast. Pick something from the wish list!",
+      title: "Newport Aquarium",
+      summary: "Day trip up the coast to the Oregon Coast Aquarium in Newport.",
       food: MEAL_PLAN,
       items: [
         {
           type: "activity",
-          name: "TODO — Pick from the wish list",
+          name: "Newport Aquarium (Oregon Coast Aquarium)",
           time: "Daytime",
-          notes: "See \"Places We Want to Visit\" below and claim one for today.",
-          coords: [43.9826, -124.0998],
+          notes: "About 1 hr north of Florence. Admission charged.",
+          coords: [44.6171, -124.0474],
+          mapsDest: "Oregon Coast Aquarium, 2820 SE Ferry Slip Rd, Newport, OR 97365",
         },
         {
           type: "camp",
@@ -122,16 +123,17 @@ const TRIP = {
     {
       day: 4,
       date: "Saturday, August 1, 2026",
-      title: "Coast Day",
-      summary: "Pick something from the wish list!",
+      title: "Cape Perpetua",
+      summary: "Cape Perpetua Scenic Area — whale watching, tide pools, and viewpoints.",
       food: MEAL_PLAN,
       items: [
         {
           type: "activity",
-          name: "TODO — Pick from the wish list",
+          name: "Cape Perpetua & Whale Watching",
           time: "Daytime",
-          notes: "",
-          coords: [43.9826, -124.0998],
+          notes: "Whale watching, tide pools, and big viewpoints.",
+          coords: [44.2809, -124.1086],
+          mapsDest: "Cape Perpetua Scenic Area, Yachats, OR 97498",
         },
         {
           type: "camp",
@@ -149,10 +151,24 @@ const TRIP = {
     {
       day: 5,
       date: "Sunday, August 2, 2026",
-      title: "Heceta Head Lighthouse",
-      summary: "Group day at Heceta Head Lighthouse.",
+      title: "Meetings, Hobbit Trail & Heceta Head",
+      summary: "Meetings at 10am, then the Hobbit Trail and Heceta Head Lighthouse.",
       food: MEAL_PLAN,
       items: [
+        {
+          type: "activity",
+          name: "Meetings",
+          time: "10:00 AM",
+          notes: "Sunday meetings at 10am before heading out for the day.",
+        },
+        {
+          type: "activity",
+          name: "Hobbit Trail",
+          time: "Daytime",
+          notes: "Magical forest-to-beach hike just south of Heceta Head.",
+          coords: [44.1440, -124.1225],
+          mapsDest: "Hobbit Trail Trailhead, Florence, OR",
+        },
         {
           type: "activity",
           name: "Heceta Head Lighthouse",
@@ -178,16 +194,17 @@ const TRIP = {
     {
       day: 6,
       date: "Monday, August 3, 2026",
-      title: "Coast Day",
-      summary: "Pick something from the wish list!",
+      title: "Outlet Stores",
+      summary: "Shopping day at the Lincoln City Outlets up the coast.",
       food: MEAL_PLAN,
       items: [
         {
           type: "activity",
-          name: "TODO — Pick from the wish list",
+          name: "Outlet Stores (Lincoln City Outlets)",
           time: "Daytime",
-          notes: "",
-          coords: [43.9826, -124.0998],
+          notes: "About 1.5 hr north. TODO: confirm which outlets.",
+          coords: [44.9591, -124.0108],
+          mapsDest: "Lincoln City Outlets, 1500 SE East Devils Lake Rd, Lincoln City, OR 97367",
         },
         {
           type: "camp",
@@ -205,16 +222,25 @@ const TRIP = {
     {
       day: 7,
       date: "Tuesday, August 4, 2026",
-      title: "Coast Day",
-      summary: "Pick something from the wish list!",
+      title: "Sea Lion Caves",
+      summary: "Sea Lion Caves — America's largest sea cave. Possible alternative: Umpqua River Lighthouse.",
       food: MEAL_PLAN,
       items: [
         {
           type: "activity",
-          name: "TODO — Pick from the wish list",
+          name: "Sea Lion Caves",
           time: "Daytime",
-          notes: "",
-          coords: [43.9826, -124.0998],
+          notes: "America's largest sea cave. Admission charged.",
+          coords: [44.1219, -124.1281],
+          mapsDest: "Sea Lion Caves, 91560 US-101, Florence, OR 97439",
+        },
+        {
+          type: "activity",
+          name: "Alternative: Umpqua River Lighthouse",
+          time: "Daytime (optional)",
+          notes: "Possible alternative to Sea Lion Caves — about 45 minutes south of Harbor Vista.",
+          coords: [43.6624, -124.1976],
+          mapsDest: "Umpqua River Lighthouse, 1020 Lighthouse Rd, Winchester Bay, OR 97467",
         },
         {
           type: "camp",
@@ -315,41 +341,6 @@ const TRIP = {
   // ===================================================================
   wishlist: [
     {
-      type: "activity",
-      name: "Sea Lion Caves",
-      notes: "America's largest sea cave. Admission charged. TODO: pick a day.",
-      coords: [44.1219, -124.1281],
-      mapsDest: "Sea Lion Caves, 91560 US-101, Florence, OR 97439",
-    },
-    {
-      type: "activity",
-      name: "Cape Perpetua & Whale Watching",
-      notes: "Whale watching, tide pools, and big viewpoints. TODO: pick a day.",
-      coords: [44.2809, -124.1086],
-      mapsDest: "Cape Perpetua Scenic Area, Yachats, OR 97498",
-    },
-    {
-      type: "activity",
-      name: "Newport Aquarium (Oregon Coast Aquarium)",
-      notes: "About 1 hr north of Florence. Admission charged. TODO: pick a day.",
-      coords: [44.6171, -124.0474],
-      mapsDest: "Oregon Coast Aquarium, 2820 SE Ferry Slip Rd, Newport, OR 97365",
-    },
-    {
-      type: "activity",
-      name: "Outlet Stores (Lincoln City Outlets)",
-      notes: "About 1.5 hr north. TODO: confirm which outlets + pick a day.",
-      coords: [44.9591, -124.0108],
-      mapsDest: "Lincoln City Outlets, 1500 SE East Devils Lake Rd, Lincoln City, OR 97367",
-    },
-    {
-      type: "activity",
-      name: "Hobbit Trail",
-      notes: "Magical forest-to-beach hike just south of Heceta Head. TODO: pick a day.",
-      coords: [44.1440, -124.1225],
-      mapsDest: "Hobbit Trail Trailhead, Florence, OR",
-    },
-    {
       type: "food",
       name: "Mo's Seafood & Chowder",
       notes: "On the plan — famous clam chowder. We could go more than once!",
@@ -363,4 +354,109 @@ const TRIP = {
       coords: null,
     },
   ],
+
+  // ===================================================================
+  // BUDGET / COSTS — per-attraction group cost breakdown (2026).
+  // All figures are GROUP totals for our party. Edit the age-tier
+  // counts here if the group or plans change. Camping is already
+  // booked & paid, so it's excluded; campsite receipts usually cover
+  // Oregon state-park day-use parking.
+  // ===================================================================
+  budget: {
+    groupSummary:
+      "16 people — 8 adults, 1 age 17, 1 age 14, 3 kids under 8, two 2-year-olds, one 1-year-old · 3 vehicles",
+    excludeNote:
+      "Camping is already booked & paid, so it's left out below. Campsite receipts usually cover Oregon state-park day-use parking.",
+
+    // Each attraction's group cost. `cost` is the headline group total
+    // used in the scenario math; `altCost` is an optional discounted/
+    // alternate figure shown alongside.
+    attractions: [
+      {
+        name: "Oregon Coast Aquarium (Newport)",
+        type: "activity",
+        cost: 295.35,
+        costLabel: "$295.35 walk-up",
+        altLabel: "≈ $266 with 10% discount",
+        who: "Adult $25.95 ×8 · Youth 13–17 $19.95 ×2 · Child 3–12 $15.95 ×3 · free 0–2 ×3",
+        note: "10% AAA / military / one-card discount ≈ $266. The 15+ group rate is quote-only — call ahead, could be cheaper.",
+      },
+      {
+        name: "Sea Lion Caves (Florence)",
+        type: "activity",
+        cost: 216,
+        costLabel: "$216",
+        who: "Adult 13+ $18 ×10 · Child 5–12 $12 ×3 · free 0–4",
+        note: "No youth rate here, so the teens pay the adult price.",
+      },
+      {
+        name: "Umpqua River Lighthouse (alt. to Sea Lion Caves)",
+        type: "activity",
+        cost: 84,
+        costLabel: "$84",
+        who: "Adult $8 ×8 · Child/Student 5–17 $4 ×5 · free 0–4",
+        note: "Swapping Sea Lion Caves → Umpqua saves ≈ $132. About 45 min south of Harbor Vista.",
+        isAlternative: true,
+      },
+      {
+        name: "Cape Perpetua — parking (federal)",
+        type: "drive",
+        cost: 15,
+        costLabel: "$15",
+        who: "$5 / vehicle ×3",
+        note: "Federal day-use site, so the state-park campsite receipt does NOT cover it.",
+      },
+      {
+        name: "Heceta Head — parking (state)",
+        type: "drive",
+        cost: 0,
+        costLabel: "Likely $0",
+        altLabel: "worst case $15",
+        who: "$5 / vehicle ×3 if not covered",
+        note: "State-park day-use — campsite receipt usually covers it. Worst case $15.",
+      },
+      {
+        name: "Hobbit Trail",
+        type: "activity",
+        cost: 0,
+        costLabel: "Free",
+        who: "Roadside trailhead, no fee",
+        note: "",
+      },
+      {
+        name: "Lincoln City Outlets",
+        type: "activity",
+        cost: 0,
+        costLabel: "Free",
+        who: "Shopping — no admission",
+        note: "Grab the free VIP \"Insider Savings\" coupon book at customer service.",
+      },
+    ],
+
+    // Two whole-trip scenarios. `total` is the expected group cost;
+    // `max` is the worst case (e.g. if Heceta parking isn't covered).
+    scenarios: [
+      {
+        label: "As planned (Sea Lion Caves)",
+        total: 497,
+        max: 512,
+        note: "Up to ≈ $512 if the Heceta Head parking isn't covered.",
+      },
+      {
+        label: "Swap to Umpqua River Lighthouse",
+        total: 365,
+        max: 380,
+        note: "Up to ≈ $380 worst case — about $130 cheaper than the plan above.",
+        best: true,
+      },
+    ],
+
+    tips: [
+      "Toddlers are free everywhere (ages 0–2), and under-5 is free at Sea Lion Caves and Umpqua.",
+      "Take the Aquarium's 10% AAA/military/one-card discount, and call ahead for the 15+ group rate — it could be cheaper.",
+      "Swapping Sea Lion Caves for Umpqua River Lighthouse saves the group about $130.",
+      "Pay parking per-day, not with annual passes — we're only here a few days.",
+      "Grab the free VIP \"Insider Savings\" coupon book at Lincoln City Outlets customer service.",
+    ],
+  },
 };

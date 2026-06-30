@@ -807,11 +807,237 @@ html, body {
 }
 
 /* =========================================================
+   BUDGET / COSTS
+   ========================================================= */
+.budget-section {
+  background: var(--color-cloud);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-pop);
+  margin-bottom: 36px;
+  border-top: 8px solid var(--color-tree);
+}
+
+.budget-section h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin: 0 0 4px;
+  font-size: 28px;
+}
+
+.budget-group {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0 0 6px;
+  color: var(--color-ink);
+  font-size: 15px;
+}
+
+.budget-exclude {
+  color: #6c757d;
+  margin: 0 0 18px;
+  font-size: 14px;
+}
+
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+
+.budget-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--color-mist);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  border-left: 5px solid var(--color-tree);
+}
+
+.budget-row.alt {
+  border-left-style: dashed;
+  border-left-color: var(--color-sky);
+  background: #eef7ff;
+}
+
+.budget-row-main {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.budget-emoji {
+  font-size: 24px;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.budget-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0 0 2px;
+  font-size: 16px;
+}
+
+.budget-who {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #495057;
+}
+
+.budget-note {
+  margin: 0;
+  font-size: 12.5px;
+  color: #868e96;
+  font-style: italic;
+}
+
+.budget-price {
+  text-align: right;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.budget-cost {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.budget-price.free .budget-cost {
+  color: var(--color-tree);
+}
+
+.budget-altcost {
+  font-size: 12px;
+  color: var(--color-sky);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* --- Scenario totals --- */
+.scenario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.scenario-card {
+  position: relative;
+  background: var(--color-paper);
+  border: 3px solid var(--color-mist);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+}
+
+.scenario-card.best {
+  border-color: var(--color-tree);
+  background: #ebfbee;
+  box-shadow: var(--shadow-soft);
+}
+
+.scenario-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-tree);
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.scenario-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 4px 0 6px;
+  font-size: 15px;
+  color: #495057;
+}
+
+.scenario-total {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 38px;
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.scenario-card.best .scenario-total {
+  color: var(--color-tree);
+}
+
+.scenario-max {
+  margin: 2px 0 6px;
+  font-size: 13px;
+  color: #868e96;
+}
+
+.scenario-note {
+  margin: 0;
+  font-size: 13px;
+  color: #6c757d;
+}
+
+/* --- Money-saving tips --- */
+.budget-tips {
+  background: #fffbea;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  border-left: 5px solid var(--color-sun);
+}
+
+.budget-tips h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.budget-tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.budget-tips li {
+  margin-bottom: 6px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.budget-tips li:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 @media (max-width: 640px) {
   .item {
     grid-template-columns: 50px 1fr;
+  }
+  .budget-row {
+    flex-direction: column;
+  }
+  .budget-price {
+    text-align: left;
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 10px;
   }
   .item-actions {
     grid-column: 1 / -1;
