@@ -1266,7 +1266,11 @@ body { padding-bottom: 78px; }
   font-weight: 600;
   font-size: 14px;
   text-align: right;
-  white-space: nowrap;
+}
+
+.cook-meal {
+  font-weight: 500;
+  color: #495057;
 }
 
 .cook-tbd { color: var(--color-coral); }

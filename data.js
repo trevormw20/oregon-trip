@@ -476,7 +476,7 @@ const TRIP = {
   // ===================================================================
   dinners: [
     { day: 1,  date: "Wed, Jul 29", place: "Burns, OR (en route)",        cook: null,  eatingOut: true  },
-    { day: 2,  date: "Thu, Jul 30", place: "Harbor Vista (arrival night)", cook: "TBD", eatingOut: false },
+    { day: 2,  date: "Thu, Jul 30", place: "Harbor Vista (arrival night)", cook: "Williams family", meal: "Taco soup", eatingOut: false },
     { day: 3,  date: "Fri, Jul 31", place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
     { day: 4,  date: "Sat, Aug 1",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
     { day: 5,  date: "Sun, Aug 2",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },

@@ -286,7 +286,7 @@ function renderDinners() {
     const cookLabel = d.eatingOut
       ? `🍽️ Eating out`
       : (d.cook && d.cook !== "TBD"
-          ? `👩‍🍳 ${escapeHtml(d.cook)}`
+          ? `👩‍🍳 ${escapeHtml(d.cook)}${d.meal ? ` — <span class="cook-meal">${escapeHtml(d.meal)}</span>` : ""}`
           : `<span class="cook-tbd">Sign up — TBD</span>`);
 
     // "Night" cell: show the day number when scheduled, else just the date
