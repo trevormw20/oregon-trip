@@ -391,11 +391,16 @@ function renderBudget() {
 // =====================================================================
 let map = null;
 let mapBounds = [];  // all pins — remembered for invalidateSize when the map is revealed
-let coastBounds = []; // just the Oregon-coast cluster — the default framing
+let coreBounds = []; // just the Florence-core attractions — the default framing
 
 // Coast pins sit around longitude -124; the inland origin stops (Pocatello
 // -112, Burns -119) are well east. Anything west of this is "on the coast".
 const COAST_LNG_MAX = -123;
+// Florence-core latitude band: frames Florence, Sea Lion Caves, Heceta Head
+// and Cape Perpetua (the southern cluster), dropping the northern day-trips
+// (Newport ~44.62, Lincoln City ~44.96) from the opening view.
+const CORE_LAT_MIN = 43.9;
+const CORE_LAT_MAX = 44.4;
 
 function renderMap() {
   // Collect all locations (home base + every item that has coords)
@@ -502,17 +507,19 @@ function renderMap() {
     dashArray: "8, 8",
   }).addTo(map);
 
-  // Default view frames the Florence / Oregon-coast attraction cluster, not
-  // the whole Idaho→Oregon drive. All pins + the route line still exist; the
-  // inland origin pins (Pocatello, Burns) just start off-screen — pan/zoom
-  // out to see them.
+  // Default view frames the Florence-core attractions (Florence, Sea Lion
+  // Caves, Heceta Head, Cape Perpetua), not the whole drive or the northern
+  // day-trips. All pins + the route line still exist; the inland origin pins
+  // and the northern stops (Newport, Lincoln City) just start off-screen —
+  // pan/zoom out to see them.
   mapBounds = bounds;
-  coastBounds = bounds.filter(c => c[1] <= COAST_LNG_MAX);
-  const initialBounds = coastBounds.length ? coastBounds : bounds;
+  coreBounds = bounds.filter(c =>
+    c[1] <= COAST_LNG_MAX && c[0] >= CORE_LAT_MIN && c[0] <= CORE_LAT_MAX);
+  const initialBounds = coreBounds.length ? coreBounds : bounds;
   if (initialBounds.length > 0) {
-    map.fitBounds(initialBounds, { padding: [30, 30], maxZoom: 11 });
+    map.fitBounds(initialBounds, { padding: [30, 30], maxZoom: 12 });
   } else {
-    map.setView([44.0, -124.1], 9); // Florence fallback
+    map.setView([44.05, -124.1], 10); // Florence-core fallback
   }
 }
 
@@ -773,10 +780,10 @@ function refreshMap() {
   if (!map) return;
   setTimeout(() => {
     map.invalidateSize();
-    // Re-center on the coast cluster (not the whole route) when revealed.
-    const b = (coastBounds && coastBounds.length) ? coastBounds : mapBounds;
+    // Re-center on the Florence-core (not the whole route) when revealed.
+    const b = (coreBounds && coreBounds.length) ? coreBounds : mapBounds;
     if (b && b.length) {
-      map.fitBounds(b, { padding: [30, 30], maxZoom: 11 });
+      map.fitBounds(b, { padding: [30, 30], maxZoom: 12 });
     }
   }, 60);
 }
