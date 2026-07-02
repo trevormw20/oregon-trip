@@ -1082,8 +1082,16 @@ body { padding-bottom: 78px; }
 
 .sec-chevron {
   flex: 0 0 auto;
-  font-size: 16px;
-  color: #868e96;
+  font-size: 28px;
+  line-height: 1;
+  color: var(--color-ink);
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-mist);
 }
 
 /* Hide the body when collapsed; tighten the bottom padding to a neat bar */
@@ -1320,6 +1328,7 @@ body { padding-bottom: 78px; }
 
   /* Slightly smaller section headings so they don't crowd narrow screens */
   .sec-title { font-size: 21px; }
+  .sec-chevron { font-size: 30px; width: 48px; height: 48px; }
   .day-detail h2,
   .wishlist-section h2,
   .cooking-section h2,

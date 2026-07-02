@@ -390,7 +390,12 @@ function renderBudget() {
 // MAP — Leaflet
 // =====================================================================
 let map = null;
-let mapBounds = []; // remembered for invalidateSize/fitBounds when the map is revealed
+let mapBounds = [];  // all pins — remembered for invalidateSize when the map is revealed
+let coastBounds = []; // just the Oregon-coast cluster — the default framing
+
+// Coast pins sit around longitude -124; the inland origin stops (Pocatello
+// -112, Burns -119) are well east. Anything west of this is "on the coast".
+const COAST_LNG_MAX = -123;
 
 function renderMap() {
   // Collect all locations (home base + every item that has coords)
@@ -497,12 +502,17 @@ function renderMap() {
     dashArray: "8, 8",
   }).addTo(map);
 
-  // Fit map to show everything
+  // Default view frames the Florence / Oregon-coast attraction cluster, not
+  // the whole Idaho→Oregon drive. All pins + the route line still exist; the
+  // inland origin pins (Pocatello, Burns) just start off-screen — pan/zoom
+  // out to see them.
   mapBounds = bounds;
-  if (bounds.length > 0) {
-    map.fitBounds(bounds, { padding: [40, 40] });
+  coastBounds = bounds.filter(c => c[1] <= COAST_LNG_MAX);
+  const initialBounds = coastBounds.length ? coastBounds : bounds;
+  if (initialBounds.length > 0) {
+    map.fitBounds(initialBounds, { padding: [30, 30], maxZoom: 11 });
   } else {
-    map.setView([44.5, -120], 6);
+    map.setView([44.0, -124.1], 9); // Florence fallback
   }
 }
 
@@ -721,13 +731,13 @@ function escapeHtml(str) {
 // =====================================================================
 const COLLAPSE_KEY = "oregonTrip.collapsed";
 
-// First-time defaults (true = start collapsed). Keep the top of the page
-// useful on a phone; collapse the longer reference sections by default.
+// First-time defaults (true = start collapsed). Everything starts minimized
+// on a phone so the page is a short list of section headers to tap open.
 // Once the user toggles a section, their choice is what's remembered.
 const COLLAPSE_DEFAULTS = {
-  "day-detail":       false,
-  "wishlist-section": false,
-  "cooking-section":  false,
+  "day-detail":       true,
+  "wishlist-section": true,
+  "cooking-section":  true,
   "budget-section":   true,
   "notes-section":    true,
   "map-section":      true,
@@ -763,8 +773,10 @@ function refreshMap() {
   if (!map) return;
   setTimeout(() => {
     map.invalidateSize();
-    if (mapBounds && mapBounds.length) {
-      map.fitBounds(mapBounds, { padding: [40, 40] });
+    // Re-center on the coast cluster (not the whole route) when revealed.
+    const b = (coastBounds && coastBounds.length) ? coastBounds : mapBounds;
+    if (b && b.length) {
+      map.fitBounds(b, { padding: [30, 30], maxZoom: 11 });
     }
   }, 60);
 }
