@@ -93,10 +93,11 @@
       <div class="sec-body" id="notes-section-body">
         <div class="notes-toolbar">
           <input type="text" id="note-author" placeholder="Your name (optional)" />
-          <button class="notes-btn" id="export-notes" title="Download notes as JSON to commit to the repo">⬇ Export</button>
+          <button class="notes-btn" id="export-notes" title="Download notes as JSON (backup)">⬇ Export</button>
           <button class="notes-btn" id="import-notes" title="Load notes from a JSON file">⬆ Import</button>
           <input type="file" id="import-file" accept="application/json" hidden />
         </div>
+        <p class="notes-sync-status" id="notes-sync-status" aria-live="polite"></p>
 
         <div class="notes-grid">
           <!-- Schedule changes column -->
@@ -133,9 +134,12 @@
         </div>
 
         <p class="notes-help">
-          Notes auto-save to this browser.
-          Click <strong>Export</strong> to download a JSON file you can commit to the GitHub repo —
-          anyone else with the repo can <strong>Import</strong> it to see all the notes.
+          When shared notes are turned on, everything you add here saves to a
+          <strong>shared Google Sheet</strong>, so the whole family sees the same list
+          (it refreshes every few seconds). Notes also cache on your device, so they
+          still show if you're offline. <strong>Export</strong> makes a JSON backup.
+          <br />
+          <em>Setup not done yet? See <code>NOTES-SETUP.md</code> to connect the Google Sheet.</em>
         </p>
       </div>
     </section>

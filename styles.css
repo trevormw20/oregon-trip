@@ -698,6 +698,17 @@ body { padding-bottom: 78px; }
   font-style: italic;
 }
 
+.notes-sync-status {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 4px 0 0;
+  min-height: 18px;
+  color: #6c757d;
+}
+.notes-sync-status[data-state="ok"]      { color: #37b24d; }
+.notes-sync-status[data-state="syncing"] { color: #4dabf7; }
+.notes-sync-status[data-state="err"]     { color: #e8590c; }
+
 /* =========================================================
    MAP SECTION
    ========================================================= */

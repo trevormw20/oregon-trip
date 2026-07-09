@@ -18,7 +18,7 @@ const MEAL_PLAN = "Breakfast & lunch on your own · Sign up to cook a group dinn
 
 const TRIP = {
   title: "The Oregon Coast Adventure",
-  subtitle: "A family road trip — July 29 to August 7, 2026",
+  subtitle: "A family road trip — July 29 to August 6, 2026",
   family: "The Ellis Family Vacation",
 
   homeBase: {
@@ -95,17 +95,25 @@ const TRIP = {
     {
       day: 3,
       date: "Friday, July 31, 2026",
-      title: "Newport Aquarium",
-      summary: "Day trip up the coast to the Oregon Coast Aquarium in Newport.",
+      title: "Outlet Stores",
+      summary: "Shopping day at the Lincoln City Outlets up the coast.",
       food: MEAL_PLAN,
       items: [
         {
           type: "activity",
-          name: "Newport Aquarium (Oregon Coast Aquarium)",
+          name: "Outlet Stores (Lincoln City Outlets)",
           time: "Daytime",
-          notes: "About 1 hr north of Florence. Admission charged.",
-          coords: [44.6171, -124.0474],
-          mapsDest: "Oregon Coast Aquarium, 2820 SE Ferry Slip Rd, Newport, OR 97365",
+          notes: "About 1.5 hr north. TODO: confirm which outlets.",
+          coords: [44.9591, -124.0108],
+          mapsDest: "Lincoln City Outlets, 1500 SE East Devils Lake Rd, Lincoln City, OR 97367",
+        },
+        {
+          type: "activity",
+          name: "Connie Hansen Garden Conservancy",
+          time: "Daytime (optional)",
+          notes: "Optional nearby stop while at the outlets — a free public garden in Lincoln City, open dawn to dusk. 1931 NW 33rd St, Lincoln City, OR 97367.",
+          coords: [44.9786, -124.0156],
+          mapsDest: "Connie Hansen Garden Conservancy, 1931 NW 33rd St, Lincoln City, OR 97367",
         },
         {
           type: "camp",
@@ -196,25 +204,17 @@ const TRIP = {
     {
       day: 6,
       date: "Monday, August 3, 2026",
-      title: "Outlet Stores",
-      summary: "Shopping day at the Lincoln City Outlets up the coast.",
+      title: "Newport Aquarium",
+      summary: "Day trip up the coast to the Oregon Coast Aquarium in Newport.",
       food: MEAL_PLAN,
       items: [
         {
           type: "activity",
-          name: "Outlet Stores (Lincoln City Outlets)",
+          name: "Newport Aquarium (Oregon Coast Aquarium)",
           time: "Daytime",
-          notes: "About 1.5 hr north. TODO: confirm which outlets.",
-          coords: [44.9591, -124.0108],
-          mapsDest: "Lincoln City Outlets, 1500 SE East Devils Lake Rd, Lincoln City, OR 97367",
-        },
-        {
-          type: "activity",
-          name: "Connie Hansen Garden Conservancy",
-          time: "Daytime (optional)",
-          notes: "Optional nearby stop while at the outlets — a free public garden in Lincoln City, open dawn to dusk. 1931 NW 33rd St, Lincoln City, OR 97367.",
-          coords: [44.9786, -124.0156],
-          mapsDest: "Connie Hansen Garden Conservancy, 1931 NW 33rd St, Lincoln City, OR 97367",
+          notes: "About 1 hr north of Florence. Admission charged.",
+          coords: [44.6171, -124.0474],
+          mapsDest: "Oregon Coast Aquarium, 2820 SE Ferry Slip Rd, Newport, OR 97365",
         },
         {
           type: "camp",
@@ -255,55 +255,35 @@ const TRIP = {
         {
           type: "camp",
           name: "Overnight at Harbor Vista Campground",
-          time: "Overnight",
-          notes: "",
+          time: "Overnight (LAST night camping)",
+          notes: "Last night at Harbor Vista — check out by 11am tomorrow, so pack up what you can tonight.",
           coords: [44.0214, -124.1333],
         },
       ],
     },
 
     // ---------------------------------------------------------------
-    // DAY 8 — Wednesday, August 5, 2026  (last full day on the coast)
+    // DAY 8 — Wednesday, August 5, 2026
+    // Check out of Harbor Vista by 11am, drive Florence → Burns, OR
     // ---------------------------------------------------------------
     {
       day: 8,
       date: "Wednesday, August 5, 2026",
-      title: "Last Coast Day",
-      summary: "Last full day before the drive home. Pack up what you can.",
-      food: MEAL_PLAN,
-      items: [
-        {
-          type: "activity",
-          name: "TODO — Pick from the wish list",
-          time: "Daytime",
-          notes: "",
-          coords: [43.9826, -124.0998],
-        },
-        {
-          type: "camp",
-          name: "Overnight at Harbor Vista Campground",
-          time: "Overnight (last night camping)",
-          notes: "",
-          coords: [44.0214, -124.1333],
-        },
-      ],
-    },
-
-    // ---------------------------------------------------------------
-    // DAY 9 — Thursday, August 6, 2026
-    // Drive back begins: Florence  →  Burns, OR (overnight stop)
-    // ---------------------------------------------------------------
-    {
-      day: 9,
-      date: "Thursday, August 6, 2026",
-      title: "Drive Back Begins",
-      summary: "Break down camp and start the drive home. Overnight on the way.",
+      title: "Leave the Coast — Drive to Burns",
+      summary: "Break down camp, check out of Harbor Vista by 11am, and drive to Burns for the night.",
       food: "Eat out or packed food",
       items: [
         {
+          type: "camp",
+          name: "Check out of Harbor Vista by 11:00 AM",
+          time: "By 11:00 AM",
+          notes: "Camp checkout is 11am — pack up and be out on time. This is the end of our stay on the coast.",
+          coords: [44.0214, -124.1333],
+        },
+        {
           type: "drive",
           name: "Drive: Florence → Burns, OR",
-          time: "Morning – Afternoon",
+          time: "Late morning – Afternoon",
           notes: "326 miles",
           miles: 326,
           coords: [43.5877, -119.0626],
@@ -321,12 +301,12 @@ const TRIP = {
     },
 
     // ---------------------------------------------------------------
-    // DAY 10 — Friday, August 7, 2026
+    // DAY 9 — Thursday, August 6, 2026
     // Drive: Burns, OR  →  Pocatello, ID (HOME)
     // ---------------------------------------------------------------
     {
-      day: 10,
-      date: "Friday, August 7, 2026",
+      day: 9,
+      date: "Thursday, August 6, 2026",
       title: "Home Sweet Home",
       summary: "Last leg of the drive — almost home!",
       food: "Eat out or packed food",
@@ -477,13 +457,12 @@ const TRIP = {
   dinners: [
     { day: 1,  date: "Wed, Jul 29", place: "Burns, OR (en route)",        cook: null,  eatingOut: true  },
     { day: 2,  date: "Thu, Jul 30", place: "Harbor Vista (arrival night)", cook: "Williams family", meal: "Taco soup", eatingOut: false },
-    { day: 3,  date: "Fri, Jul 31", place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
-    { day: 4,  date: "Sat, Aug 1",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
+    { day: 3,  date: "Fri, Jul 31", place: "Harbor Vista",                 cook: "M4 family", meal: "Sloppie Bobbies (sloppy joes)", eatingOut: false },
+    { day: 4,  date: "Sat, Aug 1",  place: "Harbor Vista",                 cook: "Barbara", eatingOut: false },
     { day: 5,  date: "Sun, Aug 2",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
     { day: 6,  date: "Mon, Aug 3",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
-    { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
-    { day: 8,  date: "Wed, Aug 5",  place: "Harbor Vista (last night)",    cook: "TBD", eatingOut: false },
-    { day: 9,  date: "Thu, Aug 6",  place: "Burns, OR (en route home)",    cook: null,  eatingOut: true  },
+    { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista (LAST camping night)", cook: "Rick & Alicia", eatingOut: false },
+    { day: 8,  date: "Wed, Aug 5",  place: "Burns, OR (en route home)",    cook: null,  eatingOut: true  },
 
     // Group eat-out dinner — Mo's, one of the camping nights. Night not yet
     // decided: to schedule it, set `day` + `date` (e.g. day: 5, date: "Sun, Aug 2"),

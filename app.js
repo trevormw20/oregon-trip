@@ -526,11 +526,26 @@ function renderMap() {
 // =====================================================================
 // FAMILY NOTES — schedule changes + family questions
 // =====================================================================
-// Notes live in localStorage (per browser). Export/Import lets the
-// family share notes via a JSON file committed to the GitHub repo.
+// FAMILY NOTES
+// Notes sync to a shared Google Sheet through a Google Apps Script web
+// app, so everyone in the family sees the same list. localStorage is a
+// local cache + offline fallback, and Export/Import still works as a
+// backup. See google-apps-script.gs + NOTES-SETUP.md to turn on sync.
+//
+// To enable sharing: deploy the Apps Script web app (NOTES-SETUP.md) and
+// paste its /exec URL below. Leave it blank to keep notes on this device
+// only (the old behavior).
+// =====================================================================
+
+const NOTES_SYNC_URL =
+  (typeof window !== "undefined" && window.NOTES_SYNC_URL) ||
+  "https://script.google.com/macros/s/AKfycbzZYLIGC04NgBlcxDQBKzfHoUoJ9WblGwcDjwL2Vv2qbVEk7ZWQlNmK8IODWhhgH4sv/exec"; // <-- paste your Google Apps Script /exec URL here
 
 const NOTES_STORAGE_KEY  = "oregon-trip-notes-v1";
 const AUTHOR_STORAGE_KEY = "oregon-trip-note-author";
+const NOTES_POLL_MS      = 20000; // re-check the sheet every 20s for others' notes
+
+function syncEnabled() { return !!NOTES_SYNC_URL; }
 
 function loadNotes() {
   try {
@@ -549,6 +564,56 @@ function loadNotes() {
 
 function saveNotes(notes) {
   localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
+}
+
+// --- Remote (shared Google Sheet) sync -------------------------------
+
+function normalizeNotes(data) {
+  return {
+    schedule:  Array.isArray(data && data.schedule)  ? data.schedule  : [],
+    questions: Array.isArray(data && data.questions) ? data.questions : [],
+  };
+}
+
+async function fetchRemoteNotes() {
+  const res = await fetch(NOTES_SYNC_URL, { method: "GET" });
+  if (!res.ok) throw new Error("GET failed: " + res.status);
+  return normalizeNotes(await res.json());
+}
+
+// A "simple" POST (text/plain) so the browser skips the CORS preflight
+// that Apps Script web apps can't answer. The script reads the raw body.
+async function postRemoteNotes(payload) {
+  const res = await fetch(NOTES_SYNC_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("POST failed: " + res.status);
+  return normalizeNotes(await res.json());
+}
+
+function setSyncStatus(msg, state) {
+  const el = document.getElementById("notes-sync-status");
+  if (!el) return;
+  el.textContent = msg || "";
+  el.dataset.state = state || "";
+}
+
+// Pull the sheet → cache → re-render. Safe to call on a timer / on focus.
+async function refreshNotesFromRemote() {
+  if (!syncEnabled()) return;
+  try {
+    setSyncStatus("Syncing…", "syncing");
+    const remote = await fetchRemoteNotes();
+    saveNotes(remote);
+    renderNoteList("schedule");
+    renderNoteList("questions");
+    setSyncStatus("✓ Synced with the family sheet", "ok");
+  } catch (e) {
+    console.warn("Notes sync (pull) failed:", e);
+    setSyncStatus("⚠ Offline — showing this device's saved copy", "err");
+  }
 }
 
 function formatNoteDate(iso) {
@@ -578,28 +643,58 @@ function renderNoteList(kind) {
   `).join("");
 
   el.querySelectorAll(".delete-note-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       const id = btn.closest(".note-item").dataset.id;
+      // Optimistic local remove so the UI feels instant.
       const all = loadNotes();
       all[kind] = all[kind].filter(n => n.id !== id);
       saveNotes(all);
       renderNoteList(kind);
+
+      if (!syncEnabled()) return;
+      try {
+        setSyncStatus("Saving…", "syncing");
+        const remote = await postRemoteNotes({ action: "delete", kind, id });
+        saveNotes(remote);
+        renderNoteList("schedule");
+        renderNoteList("questions");
+        setSyncStatus("✓ Saved to the family sheet", "ok");
+      } catch (e) {
+        console.warn("Notes sync (delete) failed:", e);
+        setSyncStatus("⚠ Deleted on this device only — reopen when online to retry", "err");
+      }
     });
   });
 }
 
-function addNote(kind, text) {
+async function addNote(kind, text) {
   if (!text || !text.trim()) return;
-  const all = loadNotes();
   const author = document.getElementById("note-author").value.trim();
-  all[kind].unshift({
+  const note = {
     id: "n_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
     text: text.trim(),
     author: author || null,
     createdAt: new Date().toISOString(),
-  });
+  };
+
+  // Optimistic local add so the note appears immediately.
+  const all = loadNotes();
+  all[kind].unshift(note);
   saveNotes(all);
   renderNoteList(kind);
+
+  if (!syncEnabled()) return;
+  try {
+    setSyncStatus("Saving…", "syncing");
+    const remote = await postRemoteNotes({ action: "add", kind, note });
+    saveNotes(remote);
+    renderNoteList("schedule");
+    renderNoteList("questions");
+    setSyncStatus("✓ Saved to the family sheet", "ok");
+  } catch (e) {
+    console.warn("Notes sync (add) failed:", e);
+    setSyncStatus("⚠ Saved on this device only — it won't reach the family until you're back online", "err");
+  }
 }
 
 // On first visit (no notes saved yet), seed from the repo's
@@ -842,10 +937,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderWishlist();
   renderDinners();
   renderBudget();
-  await maybeSeedNotes();
+  if (!syncEnabled()) await maybeSeedNotes(); // sheet is the source of truth when sync is on
   setupNotes();
   renderNoteList("schedule");
   renderNoteList("questions");
+  if (syncEnabled()) {
+    refreshNotesFromRemote();                         // pull the latest from the sheet
+    setInterval(refreshNotesFromRemote, NOTES_POLL_MS); // pick up others' notes
+    window.addEventListener("focus", refreshNotesFromRemote);
+  }
   renderMap();
   setupCollapsibles();         // after renderMap so the map var exists
   setupQuickNav();
