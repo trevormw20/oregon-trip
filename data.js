@@ -333,7 +333,7 @@ const TRIP = {
     {
       type: "food",
       name: "Mo's Seafood & Chowder",
-      notes: "On the plan — famous clam chowder. This is our group eat-out dinner one night (night TBD — see Who's Cooking). We could go more than once!",
+      notes: "On the plan — famous clam chowder. This is our arrival-night group dinner (Thu Jul 30, Dad's treat — see Who's Cooking). We could go more than once!",
       coords: [43.9686, -124.1018],
       mapsDest: "Mo's Seafood & Chowder, 1436 Bay St, Florence, OR 97439",
     },
@@ -456,24 +456,141 @@ const TRIP = {
   // ===================================================================
   dinners: [
     { day: 1,  date: "Wed, Jul 29", place: "Burns, OR (en route)",        cook: null,  eatingOut: true  },
-    { day: 2,  date: "Thu, Jul 30", place: "Harbor Vista (arrival night)", cook: "Williams family", meal: "Taco soup", eatingOut: false },
-    { day: 3,  date: "Fri, Jul 31", place: "Harbor Vista",                 cook: "M4 family", meal: "Sloppie Bobbies (sloppy joes)", eatingOut: false },
-    { day: 4,  date: "Sat, Aug 1",  place: "Harbor Vista",                 cook: "Barbara", eatingOut: false },
-    { day: 5,  date: "Sun, Aug 2",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
-    { day: 6,  date: "Mon, Aug 3",  place: "Harbor Vista",                 cook: "TBD", eatingOut: false },
-    { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista (LAST camping night)", cook: "Rick & Alicia", eatingOut: false },
-    { day: 8,  date: "Wed, Aug 5",  place: "Burns, OR (en route home)",    cook: null,  eatingOut: true  },
-
-    // Group eat-out dinner — Mo's, one of the camping nights. Night not yet
-    // decided: to schedule it, set `day` + `date` (e.g. day: 5, date: "Sun, Aug 2"),
-    // or fold it into one of the Harbor Vista nights above.
     {
-      date: "Night TBD",
-      place: "Mo's Seafood & Chowder (Florence)",
+      day: 2, date: "Thu, Jul 30",
+      place: "Mo's Seafood & Chowder — arrival night (Dad's treat)",
       address: "1436 Bay St, Florence, OR 97439",
       mapsDest: "Mo's Seafood & Chowder, 1436 Bay St, Florence, OR 97439",
-      cook: null,
-      eatingOut: true,
+      cook: null, eatingOut: true,
     },
+    { day: 3,  date: "Fri, Jul 31", place: "Eating out — outlet-stores day", cook: null, eatingOut: true },
+    { day: 4,  date: "Sat, Aug 1",  place: "Harbor Vista",                 cook: "Mike & Mila", meal: "Sloppy Bobby's", eatingOut: false },
+    { day: 5,  date: "Sun, Aug 2",  place: "Harbor Vista",                 cook: "Gramps & Gram", meal: "TBD — not decided yet", eatingOut: false },
+    { day: 6,  date: "Mon, Aug 3",  place: "Eating out — aquarium day (Dad covers aquarium admission)", cook: null, eatingOut: true },
+    { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista (LAST camping night)", cook: "Rick & Alicia", eatingOut: false },
+    { day: 8,  date: "Wed, Aug 5",  place: "Burns, OR (en route home)",    cook: null,  eatingOut: true  },
   ],
+
+  // ===================================================================
+  // FAMILY GAMES — two multiple-choice quizzes for the campfire & car.
+  //
+  // Each game has a list of questions. A question looks like:
+  //   {
+  //     q: "The question text",
+  //     choices: ["A", "B", "C", "D"],   // 2–4 options
+  //     answer: 0,                         // index of the correct choice
+  //     fact: "Optional fun fact shown after answering (can be omitted)",
+  //   }
+  //
+  // COAST TRIVIA is filled in with facts about the places on our trip.
+  // KNOW THE ELLISES starts empty — collect answers from family members
+  // (see KNOW-THE-ELLISES-questions.md), then add them here the same way.
+  // ===================================================================
+  games: {
+    coast: {
+      title: "Oregon Coast Trivia",
+      blurb: "How much do you know about the places we're visiting? Tap your answer!",
+      questions: [
+        {
+          q: "Sea Lion Caves is the largest sea cave in which country?",
+          choices: ["The United States", "Canada", "Mexico", "Iceland"],
+          answer: 0,
+          fact: "Sea Lion Caves near Florence is billed as America's largest sea cave — big enough to fit a 12-story building!",
+        },
+        {
+          q: "What noisy animals lounge and swim inside Sea Lion Caves?",
+          choices: ["Sea lions", "Penguins", "Polar bears", "Dolphins"],
+          answer: 0,
+          fact: "Steller sea lions haul out and bark inside the cave — you'll smell and hear them before you see them.",
+        },
+        {
+          q: "The Oregon Coast Aquarium we're visiting is in which town?",
+          choices: ["Newport", "Florence", "Portland", "Seaside"],
+          answer: 0,
+          fact: "It's about an hour north of our campground, right on Yaquina Bay in Newport.",
+        },
+        {
+          q: "A famous movie orca once lived at the Oregon Coast Aquarium. Which whale?",
+          choices: ["Keiko from 'Free Willy'", "Shamu", "Moby Dick", "Willy Wonka"],
+          answer: 0,
+          fact: "Keiko, the orca from 'Free Willy,' was rehabilitated at the aquarium from 1996 to 1998 before being released.",
+        },
+        {
+          q: "Heceta Head Lighthouse is one of the brightest on the coast — how far out to sea can its light be seen?",
+          choices: ["About 2 miles", "About 21 miles", "About 100 miles", "About 500 miles"],
+          answer: 1,
+          fact: "Its beam reaches roughly 21 miles out — it's often called the strongest light on the Oregon Coast.",
+        },
+        {
+          q: "Why is the Hobbit Trail so magical to walk?",
+          choices: ["It's a leafy green tunnel through the trees", "It's inside a cave", "It's a lava tube", "It's a subway"],
+          answer: 0,
+          fact: "The trail winds through a tunnel of salal and shore pine that opens onto the beach — very Middle-earth.",
+        },
+        {
+          q: "What soup is Mo's in Florence famous for?",
+          choices: ["Clam chowder", "Tomato soup", "Chicken noodle", "Pho"],
+          answer: 0,
+          fact: "Mo's has been serving its creamy clam chowder on the Oregon Coast since 1946.",
+        },
+        {
+          q: "Our campground, Harbor Vista, looks out over the mouth of which river?",
+          choices: ["The Siuslaw River", "The Columbia River", "The Mississippi River", "The Rogue River"],
+          answer: 0,
+          fact: "Harbor Vista sits above the north jetty where the Siuslaw River meets the Pacific.",
+        },
+        {
+          q: "At Cape Perpetua, what giant animal might you spot swimming offshore?",
+          choices: ["Gray whales", "Great white sharks", "Manatees", "Hippos"],
+          answer: 0,
+          fact: "Gray whales migrate past the Oregon Coast — Cape Perpetua's high viewpoints are a great place to watch for their spouts.",
+        },
+        {
+          q: "Which of these critters would you actually find in a tide pool?",
+          choices: ["Sea stars", "Lions", "Frogs", "Eagles"],
+          answer: 0,
+          fact: "Tide pools are full of sea stars, anemones, hermit crabs, and mussels — look but don't grab!",
+        },
+        {
+          q: "Cape Perpetua has the highest viewpoint you can drive to on the coast. About how high above the ocean is it?",
+          choices: ["About 80 feet", "About 800 feet", "About 8,000 feet", "About 80,000 feet"],
+          answer: 1,
+          fact: "The overlook sits around 800 feet up — on a clear day you can see 37 miles of coastline.",
+        },
+        {
+          q: "Florence is famous for giant hills of what, perfect for dune buggies?",
+          choices: ["Sand", "Snow", "Grass", "Gravel"],
+          answer: 0,
+          fact: "The Oregon Dunes near Florence are the largest expanse of coastal sand dunes in North America.",
+        },
+        {
+          q: "What color are the gray whales that migrate past Oregon?",
+          choices: ["Gray", "Bright pink", "Rainbow", "Neon green"],
+          answer: 0,
+          fact: "Gray whales are — you guessed it — gray, often mottled with white patches of barnacles.",
+        },
+        {
+          q: "Heceta Head Lighthouse is said to be one of the most ________ in the country.",
+          choices: ["Photographed lighthouses", "Haunted castles", "Tallest buildings", "Expensive hotels"],
+          answer: 0,
+          fact: "Perched on a cliff above a cove, Heceta Head is one of the most photographed lighthouses in the United States (some say it's a little haunted, too!).",
+        },
+      ],
+    },
+
+    ellises: {
+      title: "How Well Do You Know the Ellises?",
+      blurb: "Guess how each family member answered. Questions coming soon — the family's still filling these out!",
+      questions: [
+        // Fill these in once family members send back their answers.
+        // Example format:
+        // {
+        //   q: "What is Grandpa Ellis's favorite ice cream flavor?",
+        //   choices: ["Rocky Road", "Vanilla", "Mint chip", "Butter pecan"],
+        //   answer: 2,
+        //   fact: "He says mint chip reminds him of summers as a kid.",
+        // },
+      ],
+    },
+  },
 };
