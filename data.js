@@ -467,7 +467,7 @@ const TRIP = {
     { day: 4,  date: "Sat, Aug 1",  place: "Harbor Vista",                 cook: "Mike & Mila", meal: "Sloppy Bobby's", eatingOut: false },
     { day: 5,  date: "Sun, Aug 2",  place: "Harbor Vista",                 cook: "Gramps & Gram", meal: "TBD — not decided yet", eatingOut: false },
     { day: 6,  date: "Mon, Aug 3",  place: "Eating out — aquarium day (Dad covers aquarium admission)", cook: null, eatingOut: true },
-    { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista (LAST camping night)", cook: "Rick & Alicia", eatingOut: false },
+    { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista (LAST camping night)", cook: "Williams family", eatingOut: false },
     { day: 8,  date: "Wed, Aug 5",  place: "Burns, OR (en route home)",    cook: null,  eatingOut: true  },
   ],
 
