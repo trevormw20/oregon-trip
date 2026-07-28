@@ -29,52 +29,56 @@ const TRIP = {
   days: [
     // ---------------------------------------------------------------
     // DAY 1 — Wednesday, July 29, 2026
-    // Drive: Pocatello, ID  →  Days Inn by Wyndham Burns (Burns, OR)
+    // Drive: Pocatello, ID  →  Best Western Elko Inn (Elko, NV)
+    // FIRE DETOUR: the Burns, OR overnight was cancelled because of the
+    // Oregon wildfires; we now go south through Nevada instead.
     // ---------------------------------------------------------------
     {
       day: 1,
       date: "Wednesday, July 29, 2026",
-      title: "Hit the Road!",
-      summary: "Leave Pocatello and drive to Burns, Oregon for the night.",
+      title: "Hit the Road! (Fire Detour)",
+      summary: "Leave Pocatello and drive to Elko, Nevada for the night. Oregon wildfires forced us to cancel the Burns, OR stay, so we're routing south through Nevada instead.",
       food: "Eat out or packed food",
       items: [
         {
           type: "drive",
-          name: "Drive: Pocatello, ID → Burns, OR",
+          name: "Drive: Pocatello, ID → Elko, NV",
           time: "All day",
-          notes: "425 miles",
-          miles: 425,
-          coords: [43.5877, -119.0626],
-          mapsDest: "Days Inn by Wyndham Burns, 577 West Monroe St, Burns, OR 97720",
+          notes: "~277 miles (approximate) — roughly 4.5–5 hours via I-86/I-84 to Twin Falls, then US-93 south to Wells and I-80 west into Elko. Shorter than the old Burns leg, but it makes tomorrow much longer.",
+          miles: 277,
+          coords: [40.8452, -115.7487],
+          mapsDest: "Best Western Elko Inn, 1930 Idaho St, Elko, NV 89801",
         },
         {
           type: "lodging",
-          name: "Days Inn by Wyndham Burns",
+          name: "Best Western Elko Inn",
           time: "Overnight",
-          notes: "577 West Monroe St, Burns, OR 97720. Travel night on the way TO camp. TODO: confirmation #, check-in time",
-          coords: [43.5877, -119.0626],
-          mapsDest: "Days Inn by Wyndham Burns, 577 West Monroe St, Burns, OR 97720",
+          notes: "1930 Idaho St, Elko, NV 89801. Travel night on the way TO camp — this replaces the cancelled Days Inn Burns stay (Oregon wildfires). TODO: confirmation #, check-in time",
+          coords: [40.8452, -115.7487],
+          mapsDest: "Best Western Elko Inn, 1930 Idaho St, Elko, NV 89801",
         },
       ],
     },
 
     // ---------------------------------------------------------------
     // DAY 2 — Thursday, July 30, 2026
-    // Drive: Burns  →  Harbor Vista County Campground (Florence, OR)
+    // Drive: Elko, NV  →  Harbor Vista County Campground (Florence, OR)
+    // FIRE DETOUR: ~670 mi. This is the longest day of the whole trip —
+    // see the note below about possibly splitting it.
     // ---------------------------------------------------------------
     {
       day: 2,
       date: "Thursday, July 30, 2026",
-      title: "Travel & Arrive at Florence",
-      summary: "Drive to the Oregon Coast and set up camp at Harbor Vista.",
+      title: "Long Haul to the Coast",
+      summary: "The big one — drive from Elko, Nevada all the way to the Oregon Coast and set up camp at Harbor Vista. About 670 miles / 11–12 hours because of the fire detour, so plan an early start.",
       food: MEAL_PLAN,
       items: [
         {
           type: "drive",
-          name: "Drive: Burns → Florence, OR",
-          time: "Morning – Afternoon",
-          notes: "326 miles",
-          miles: 326,
+          name: "Drive: Elko, NV → Florence, OR",
+          time: "Early morning – Evening",
+          notes: "~670 miles (approximate) — roughly 11–12 hours via I-80 west to Winnemucca, US-95 north into Oregon, then US-20 west through Burns and Bend to Eugene and OR-126 out to Florence. VERY long day: leave at first light, plan real meal/gas stops, and swap drivers.",
+          miles: 670,
           coords: [44.0214, -124.1333],
           mapsDest: "Harbor Vista County Campground, 87658 Harbor Vista Rd, Florence, OR 97439",
         },
@@ -455,7 +459,7 @@ const TRIP = {
   // Just fill in `cook` with a name, or set `eatingOut: true`.
   // ===================================================================
   dinners: [
-    { day: 1,  date: "Wed, Jul 29", place: "Days Inn, Burns, OR (en route to camp)", cook: null,  eatingOut: true  },
+    { day: 1,  date: "Wed, Jul 29", place: "Best Western Elko Inn, Elko, NV (en route to camp)", cook: null,  eatingOut: true  },
     { day: 2,  date: "Thu, Jul 30", place: "Harbor Vista — arrival night", cook: "Trevor", meal: "TBD — not decided yet", eatingOut: false },
     { day: 3,  date: "Fri, Jul 31", place: "Harbor Vista (outlet-stores day)", cook: "Mike & Mila", meal: "Sloppy Bobby's", eatingOut: false },
     { day: 4,  date: "Sat, Aug 1",  place: "Eating out — TBD",            cook: null, eatingOut: true },
