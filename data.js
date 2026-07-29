@@ -268,13 +268,15 @@ const TRIP = {
 
     // ---------------------------------------------------------------
     // DAY 8 — Wednesday, August 5, 2026
-    // Check out of Harbor Vista by 11am, drive Florence → Burns, OR
+    // Check out of Harbor Vista by 11am, drive Florence, OR → Elko, NV
+    // FIRE DETOUR: the return now mirrors the outbound, back through
+    // Nevada. This replaces the Mel's house / Nampa, ID overnight.
     // ---------------------------------------------------------------
     {
       day: 8,
       date: "Wednesday, August 5, 2026",
-      title: "Leave the Coast — Drive to Nampa",
-      summary: "Break down camp, check out of Harbor Vista by 11am, and drive to Mel's house in Nampa, Idaho for the night. Long driving day — about 10–11 hours.",
+      title: "Leave the Coast — Long Haul to Elko",
+      summary: "Break down camp, check out of Harbor Vista by 11am, and drive back to the Best Western Elko Inn in Elko, Nevada for the night. Very long driving day — about 670 miles / 11–12 hours, mirroring the fire detour we took on the way out.",
       food: "Eat out or packed food",
       items: [
         {
@@ -286,41 +288,41 @@ const TRIP = {
         },
         {
           type: "drive",
-          name: "Drive: Florence, OR → Nampa, ID",
-          time: "Late morning – Evening",
-          notes: "~520 miles (approximate) — roughly 10–11 hours of driving, east through Burns and Ontario. Leaving after the 11am checkout puts us at Mel's late, so plan meal/gas stops.",
-          miles: 520,
-          coords: [43.5186, -116.6442],
-          mapsDest: "10049 Mallard Dr, Nampa, ID 83686",
+          name: "Drive: Florence, OR → Elko, NV",
+          time: "Late morning – Late night",
+          notes: "~670 miles (approximate) — roughly 11–12 hours via OR-126 to Eugene, US-20 east through Bend and Burns, then US-95 south into Nevada and I-80 east to Elko. HEADS UP: the 11am checkout means we can't leave early, so this puts us into Elko very late. Pack up the night before, plan meal/gas stops, and swap drivers.",
+          miles: 670,
+          coords: [40.8452, -115.7487],
+          mapsDest: "Best Western Elko Inn, 1930 Idaho St, Elko, NV 89801",
         },
         {
           type: "lodging",
-          name: "Mel's house",
+          name: "Best Western Elko Inn",
           time: "Overnight",
-          notes: "10049 Mallard Dr, Nampa, ID 83686. Staying at Mel's on the drive home (replaces the earlier plan of a second night at Days Inn Burns).",
-          coords: [43.5186, -116.6442],
-          mapsDest: "10049 Mallard Dr, Nampa, ID 83686",
+          notes: "1930 Idaho St, Elko, NV 89801. Same hotel as the first night out — the fire detour sends us home the way we came, through Nevada. TODO: confirmation #, and warn the hotel about a late arrival.",
+          coords: [40.8452, -115.7487],
+          mapsDest: "Best Western Elko Inn, 1930 Idaho St, Elko, NV 89801",
         },
       ],
     },
 
     // ---------------------------------------------------------------
     // DAY 9 — Thursday, August 6, 2026
-    // Drive: Burns, OR  →  Pocatello, ID (HOME)
+    // Drive: Elko, NV  →  Pocatello, ID (HOME)
     // ---------------------------------------------------------------
     {
       day: 9,
       date: "Thursday, August 6, 2026",
       title: "Home Sweet Home",
-      summary: "Last leg of the drive — almost home!",
+      summary: "Last leg of the drive — up out of Nevada and home to Pocatello.",
       food: "Eat out or packed food",
       items: [
         {
           type: "drive",
-          name: "Drive: Nampa, ID → Pocatello, ID",
+          name: "Drive: Elko, NV → Pocatello, ID",
           time: "Most of the day",
-          notes: "~260 miles (approximate) — about 4.5 hours, home by evening. Shorter than the old Burns route since we're starting from Mel's.",
-          miles: 260,
+          notes: "~277 miles (approximate) — about 4.5–5 hours via I-80 east to Wells, US-93 north to Twin Falls, then I-84/I-86 home. The mirror of our first day out. Home by evening.",
+          miles: 277,
           coords: [42.8713, -112.4455],
           mapsDest: "Pocatello, ID",
         },
@@ -466,7 +468,7 @@ const TRIP = {
     { day: 5,  date: "Sun, Aug 2",  place: "Harbor Vista",                 cook: "Ma & Pa", meal: "TBD — not decided yet", eatingOut: false },
     { day: 6,  date: "Mon, Aug 3",  place: "Eating out — aquarium day (Dad covers aquarium admission)", cook: null, eatingOut: true },
     { day: 7,  date: "Tue, Aug 4",  place: "Harbor Vista (LAST camping night)", cook: "Rick & Alicia", meal: "TBD — not decided yet", eatingOut: false },
-    { day: 8,  date: "Wed, Aug 5",  place: "Mel's house (en route home) — eating out, spot TBD", cook: null,  eatingOut: true  },
+    { day: 8,  date: "Wed, Aug 5",  place: "Best Western Elko Inn, Elko, NV (en route home) — eating out, spot TBD", cook: null,  eatingOut: true  },
   ],
 
   // ===================================================================
